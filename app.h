@@ -18,8 +18,8 @@ typedef void           U0;   // Void type, has no size
 
 struct App
 {
-    const int screenWidth = 800;
-    const int screenHeight = 480;
+    const I16 screenWidth = 800;
+    const I16 screenHeight = 480;
 
     U0 Init();
     U0 Close();
