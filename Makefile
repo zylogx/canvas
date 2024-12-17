@@ -1,8 +1,10 @@
-CC = gcc
-CFLAGS = -Wall -std=gnu2x
+CC = g++
+CFLAGS = -Wall -std=c++17
 LIBS = -lraylib -lm -ldl -lpthread -lGL -lrt -lX11
-SRC = main.c
+SRC = app.cpp main.cpp
 OUT = main
+
+.PHONY: all run clean
 
 all: $(OUT)
 

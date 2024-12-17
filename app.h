@@ -1,3 +1,4 @@
+#include "math.h"
 #include "stdint.h"
 #include "raylib.h"
 
@@ -15,9 +16,19 @@ typedef int8_t         I8;   // Signed 8-bit integer type (1 byte)
 typedef bool           Bool; // Boolean (1 byte, 0 or 1 only)
 typedef void           U0;   // Void type, has no size
 
-typedef struct 
+struct App
 {
+    const int screenWidth = 800;
+    const int screenHeight = 480;
+
+    U0 Init();
+    U0 Close();
+    U0 Run();
+
     RenderTexture2D canvas;
-    Rectangle rec;
-    Bool isDrawRec;
-} App;
+};
+
+App* AppPtr();
+U0 DrawDottedRec(Rectangle rec, Color color);
+U0 DrawCanvas(RenderTexture2D canvas);
+U0 DrawRecToCanvas(RenderTexture2D canvas, Rectangle& rec, Bool& isDrawRec);

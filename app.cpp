@@ -1,7 +1,35 @@
-#include "main.h"
+#include "app.h"
 
-const I16 screenWidth = 800;
-const I16 screenHeight = 450;
+App* pApp = nullptr;
+
+App* AppPtr()
+{
+    if (pApp == nullptr)
+    {
+        pApp = new App();
+    }
+
+    return pApp;
+}
+
+U0 App::Init()
+{
+    InitWindow(screenWidth, screenHeight, "");
+    SetTargetFPS(120);
+    SetExitKey(0);
+
+    canvas = LoadRenderTexture(GetScreenWidth(), GetScreenHeight());
+    
+    BeginTextureMode(canvas);
+    ClearBackground(RAYWHITE);
+    EndTextureMode();
+}
+
+U0 App::Close()
+{
+    CloseWindow();
+    delete this;
+}
 
 U0 DrawDottedRec(Rectangle rec, Color color) 
 {
@@ -50,7 +78,7 @@ U0 DrawCanvas(RenderTexture2D canvas)
     );
 }
 
-U0 DrawRecToCanvas(RenderTexture2D canvas, Rectangle* rec, Bool* isDrawRec)
+U0 DrawRecToCanvas(RenderTexture2D canvas, Rectangle& rec, Bool& isDrawRec)
 {
     static F32 dx = 0.0f, dy = 0.0f;
     Vector2 mousePos = GetMousePosition();
@@ -62,7 +90,7 @@ U0 DrawRecToCanvas(RenderTexture2D canvas, Rectangle* rec, Bool* isDrawRec)
         dy = mousePos.y;
     }
 
-    *isDrawRec = false;
+    isDrawRec = false;
 
     if (IsMouseButtonDown(0))
     {
@@ -74,69 +102,19 @@ U0 DrawRecToCanvas(RenderTexture2D canvas, Rectangle* rec, Bool* isDrawRec)
         F32 top    = (y1 < y2) ? y1 : y2;
         F32 bottom = (y1 > y2) ? y1 : y2;
 
-        *rec = (Rectangle){ left, top, right - left, bottom - top };
+        rec = (Rectangle){ left, top, right - left, bottom - top };
 
-        DrawDottedRec(*rec, BLACK);
+        DrawDottedRec(rec, BLACK);
     }
     else if (IsMouseButtonReleased(0))
     {
-        *isDrawRec = true;
+        isDrawRec = true;
     }
 
-    if (*isDrawRec)
+    if (isDrawRec)
     {
         BeginTextureMode(canvas);
-        DrawRectangleLinesEx(*rec, 1.4f, BLACK);
+        DrawRectangleLinesEx(rec, 1.4f, BLACK);
         EndTextureMode();
     }
-}
-
-App InitApp()
-{
-    InitWindow(screenWidth, screenHeight, "");
-    SetTargetFPS(120);
-    SetExitKey(0);
-
-    App appData = { 0 };
-    appData.canvas = LoadRenderTexture(GetScreenWidth(), GetScreenHeight());
-    
-    BeginTextureMode(appData.canvas);
-    ClearBackground(RAYWHITE);
-    EndTextureMode();
-    
-    appData.rec = (Rectangle){ 0 };
-    appData.isDrawRec = (Bool){ 0 };
-
-    return appData;
-}
-
-U0 UpdateApp(U0* appData)
-{
-    App* data = appData;
-
-    BeginDrawing();
-    DrawCanvas(data->canvas);
-    DrawRecToCanvas(data->canvas, &data->rec, &data->isDrawRec);  
-    DrawFPS(5, 5);
-    EndDrawing();
-}
-
-U0 CloseApp(U0* appData)
-{
-    App* data = appData;
-
-    UnloadRenderTexture(data->canvas);
-    CloseWindow();
-}
-
-U0 main()
-{
-    App app = InitApp();
-
-    while (!WindowShouldClose())
-    {
-        UpdateApp(&app);
-    }
-
-    CloseApp(&app);
 }
