@@ -1,6 +1,9 @@
-#include "math.h"
 #include "stdint.h"
 #include "raylib.h"
+#include "raymath.h"
+
+#include <stack>
+#include <cstdlib>
 
 // Inspired by https://holyc-lang.com/docs/language-spec/learn-types
 typedef double         F64;  // 64-bit floating point type (8 bytes)
@@ -16,19 +19,18 @@ typedef int8_t         I8;   // Signed 8-bit integer type (1 byte)
 typedef bool           Bool; // Boolean (1 byte, 0 or 1 only)
 typedef void           U0;   // Void type, has no size
 
-struct App
+typedef struct 
 {
-    const I16 screenWidth = 800;
-    const I16 screenHeight = 480;
-
-    U0 Init();
-    U0 Close();
-    U0 Run();
-
     RenderTexture2D canvas;
-};
+    Rectangle rec;
+    Bool isDrawRec;
+} App;
 
-App* AppPtr();
-U0 DrawDottedRec(Rectangle rec, Color color);
-U0 DrawCanvas(RenderTexture2D canvas);
-U0 DrawRecToCanvas(RenderTexture2D canvas, Rectangle& rec, Bool& isDrawRec);
+typedef struct 
+{
+    I32 x;
+    I32 y;
+} Point;
+
+const I16 screenWidth = 800;
+const I16 screenHeight = 450;

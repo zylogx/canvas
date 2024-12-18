@@ -1,7 +1,7 @@
 CC = g++
 CFLAGS = -Wall -std=c++17
 LIBS = -lraylib -lm -ldl -lpthread -lGL -lrt -lX11
-SRC = app.cpp main.cpp
+SRC = app.cpp
 OUT = main
 
 .PHONY: all run clean
