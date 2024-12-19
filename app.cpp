@@ -51,7 +51,7 @@ U0 DrawRecToCanvas(RenderTexture2D canvas, Rectangle* rec, Bool* isDrawRec)
     Vector2 mousePos = GetMousePosition();
 
     // Capture the starting point of the rectangle on mouse press
-    if (IsMouseButtonPressed(0))
+    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
     {
         dx = mousePos.x;
         dy = mousePos.y;
@@ -59,7 +59,7 @@ U0 DrawRecToCanvas(RenderTexture2D canvas, Rectangle* rec, Bool* isDrawRec)
 
     *isDrawRec = false;
 
-    if (IsMouseButtonDown(0))
+    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
     {
         F32 x1 = dx, x2 = mousePos.x;
         F32 y1 = dy, y2 = mousePos.y;
@@ -75,7 +75,7 @@ U0 DrawRecToCanvas(RenderTexture2D canvas, Rectangle* rec, Bool* isDrawRec)
         // Ensure the rectangle is being drawn while dragging
         DrawDottedRec(*rec, BLACK);
     }
-    else if (IsMouseButtonReleased(0))
+    else if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
     {
         // Flag when the rectangle is drawn
         *isDrawRec = true;
@@ -177,7 +177,7 @@ App InitApp()
     EndTextureMode();
     
     appData.rec = (Rectangle){ 0 };
-    appData.isDrawRec = (Bool){ 0 };
+    appData.isDrawRec = false;
 
     return appData;
 }
