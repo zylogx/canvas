@@ -6,6 +6,7 @@ typedef struct
     Rectangle rec;
     Bool isDrawRec;
     ColorPicker colorPicker;
+    Rectangle toolbarRec;
 } App;
 
 typedef struct 

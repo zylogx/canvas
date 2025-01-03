@@ -2,7 +2,7 @@
 
 U0 StackInit(Stack* stack, Size capacity) 
 {
-    stack->data = MemAlloc(capacity * sizeof(Point));
+    stack->data = MemAlloc(capacity*sizeof(Point));
     stack->size = 0;
     stack->capacity = capacity;
 }
@@ -22,7 +22,7 @@ U0 StackPush(Stack* stack, Point point)
     if (stack->size == stack->capacity) 
     {
         stack->capacity *= 2;
-        stack->data = MemRealloc(stack->data, stack->capacity * sizeof(Point));
+        stack->data = MemRealloc(stack->data, stack->capacity*sizeof(Point));
     }
     stack->data[stack->size++] = point;
 }
@@ -110,7 +110,7 @@ U0 DrawDottedRec(Rectangle rec, Color color)
     }
 }
 
-U0 DrawCanvas(RenderTexture2D target)
+U0 DrawCanvas(const RenderTexture2D target)
 {
     ClearBackground(RAYWHITE);
     DrawTextureRec(
@@ -121,7 +121,7 @@ U0 DrawCanvas(RenderTexture2D target)
     );
 }
 
-U0 DrawRecToCanvas(RenderTexture2D canvas, Rectangle* rec, Bool* isDrawRec)
+U0 DrawRecToCanvas(const RenderTexture2D canvas, Rectangle* rec, Bool* isDrawRec)
 {
     static F32 dx = 0.0f, dy = 0.0f;
     Vector2 mousePos = GetMousePosition();
@@ -216,7 +216,7 @@ static U0 PaintBucket(const RenderTexture2D canvas, I32 mouseX, I32 mouseY, Colo
 
 U0 UpdateApp(U0* appData)
 {
-    App* data = (App*)appData;
+    App* data = appData;
 
     Vector2 mousePos = GetMousePosition();
 
@@ -234,6 +234,7 @@ U0 UpdateApp(U0* appData)
         PaintBucket(data->canvas, mouseX, mouseY, currentColor);
     }
 
+    DrawRectangleRec(data->toolbarRec, LIGHTGRAY);
     DrawColorPicker(&data->colorPicker, mousePos);
     DrawFPS(5, 5);
     EndDrawing();
@@ -257,12 +258,14 @@ App InitApp()
     
     InitColorPicker(&appData.colorPicker);
 
+    appData.toolbarRec = (Rectangle){ 0.0f, 0.0f, GetScreenWidth(), 90.0f };
+
     return appData;
 }
 
 U0 CloseApp(U0* appData)
 {
-    App* data = (App*)appData;
+    App* data = appData;
 
     UnloadRenderTexture(data->canvas);
     CloseWindow();
