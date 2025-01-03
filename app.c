@@ -1,5 +1,81 @@
 #include "app.h"
 
+U0 StackInit(Stack* stack, Size capacity) 
+{
+    stack->data = MemAlloc(capacity * sizeof(Point));
+    stack->size = 0;
+    stack->capacity = capacity;
+}
+
+U0 StackFree(Stack* stack) 
+{
+    MemFree(stack->data);
+}
+
+Bool StackIsEmpty(Stack* stack) 
+{
+    return stack->size == 0;
+}
+
+U0 StackPush(Stack* stack, Point point) 
+{
+    if (stack->size == stack->capacity) 
+    {
+        stack->capacity *= 2;
+        stack->data = MemRealloc(stack->data, stack->capacity * sizeof(Point));
+    }
+    stack->data[stack->size++] = point;
+}
+
+Point StackPop(Stack* stack) 
+{
+    return stack->data[--stack->size];
+}
+
+Bool ColorsEqual(Color c1, Color c2) 
+{
+    return c1.r == c2.r && c1.g == c2.g && c1.b == c2.b && c1.a == c2.a;
+}
+
+U0 FloodFill(Image* image, int x, int y, Color targetColor, Color fillColor) 
+{
+    if (!image || !image->data) 
+    {
+        return;
+    }
+
+    Stack stack;
+    StackInit(&stack, 64);
+
+    StackPush(&stack, (Point){ x, y });
+
+    Color* pixels = (Color*)image->data;
+
+    while (!StackIsEmpty(&stack)) 
+    {
+        Point p = StackPop(&stack);
+
+        if (p.x < 0 || p.y < 0 || p.x >= image->width || p.y >= image->height) 
+        {
+            continue;
+        }
+
+        Color currentColor = pixels[p.y * image->width + p.x];
+
+        if (ColorsEqual(currentColor, targetColor)) 
+        {
+            pixels[p.y * image->width + p.x] = fillColor;
+
+            StackPush(&stack, (Point){ p.x + 1, p.y });
+            StackPush(&stack, (Point){ p.x - 1, p.y });
+            StackPush(&stack, (Point){ p.x, p.y + 1 });
+            StackPush(&stack, (Point){ p.x, p.y - 1 });
+        }
+    }
+
+    StackFree(&stack);
+}
+
 U0 DrawDottedRec(Rectangle rec, Color color) 
 {
     const F32 dotLength = 10.0f;
@@ -95,37 +171,46 @@ U0 DrawRecToCanvas(RenderTexture2D canvas, Rectangle* rec, Bool* isDrawRec)
     }
 }
 
-U0 FloodFill(Image* image, I32 x, I32 y, Color targetColor, Color fillColor)
+static U0 PaintBucket(const RenderTexture2D canvas, I32 mouseX, I32 mouseY, Color color)
 {
-    std::stack<Point> stack;
-    stack.push({ x, y });
+    Image imageA = LoadImageFromTexture(canvas.texture);
 
-    Color* pixels = (Color*)image->data;
-
-    while (!stack.empty())
+    if (mouseX < 0 || mouseY < 0 || mouseX >= imageA.width || mouseY >= imageA.height) 
     {
-        Point p = stack.top();
-        stack.pop();
+        UnloadImage(imageA);
+        return; // Ensure mouse position is valid
+    }
 
-        if (p.x < 0 || p.y < 0 || p.x >= image->width || p.y >= image->height)
-        {
-            continue;
-        }
+    Color* pixels = (Color*)imageA.data;
+    Color targetColor = pixels[mouseY*imageA.width + mouseX];
+    Color fillColor = color;
 
-        Color currentColor = pixels[p.y * image->width + p.x];
+    // Exit early if the target color is the same as the fill color
+    if (targetColor.r == fillColor.r &&
+        targetColor.g == fillColor.g &&
+        targetColor.b == fillColor.b &&
+        targetColor.a == fillColor.a) 
+    {
+        UnloadImage(imageA);
+        return;
+    }
+    else
+    {
+        UnloadImage(imageA);
 
-        if ((currentColor.r == targetColor.r) && 
-            (currentColor.g == targetColor.g) && 
-            (currentColor.b == targetColor.b) && 
-            (currentColor.a == targetColor.a)) 
-        {
-            pixels[p.y * image->width + p.x] = fillColor;
+        Image imageB = LoadImageFromTexture(canvas.texture);
 
-            stack.push({ p.x + 1, p.y });
-            stack.push({ p.x - 1, p.y });
-            stack.push({ p.x, p.y + 1 });
-            stack.push({ p.x, p.y - 1 });
-        }
+        Color* pixels = (Color*)imageB.data;
+        Color targetColor = pixels[mouseY*imageB.width + mouseX];
+        Color fillColor = color;
+
+        FloodFill(&imageB, mouseX, mouseY, targetColor, fillColor);
+
+        // Update the texture with modified pixel data
+        UpdateTexture(canvas.texture, imageB.data);
+
+        // Unload image after updating the texture
+        UnloadImage(imageB);
     }
 }
 
@@ -133,35 +218,26 @@ U0 UpdateApp(U0* appData)
 {
     App* data = (App*)appData;
 
+    Vector2 mousePos = GetMousePosition();
+
+    Color currentColor = GetColorPickerCurrentColor(data->colorPicker);
+
     BeginDrawing();
     DrawCanvas(data->canvas);
     DrawRecToCanvas(data->canvas, &data->rec, &data->isDrawRec);  
 
     if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) 
     {
-        Vector2 mousePos = GetMousePosition();
-        Image image = LoadImageFromTexture(data->canvas.texture);
-
         I32 mouseX = (I32)mousePos.x;
         I32 mouseY = (I32)mousePos.y;
 
-        Color* pixels = (Color*)image.data;
-        Color targetColor = pixels[mouseY * image.width + mouseX];
-        Color fillColor = (Color){ rand() % 256, rand() % 256, rand() % 256, 255 };
-
-        FloodFill(&image, mouseX, mouseY, targetColor, fillColor);
-
-        // Update the texture with modified pixel data
-        UpdateTexture(data->canvas.texture, image.data);
-
-        // Unload image after updating the texture
-        UnloadImage(image);
+        PaintBucket(data->canvas, mouseX, mouseY, currentColor);
     }
 
+    DrawColorPicker(&data->colorPicker, mousePos);
     DrawFPS(5, 5);
     EndDrawing();
 }
-
 
 App InitApp()
 {
@@ -178,6 +254,8 @@ App InitApp()
     
     appData.rec = (Rectangle){ 0 };
     appData.isDrawRec = false;
+    
+    InitColorPicker(&appData.colorPicker);
 
     return appData;
 }
@@ -190,7 +268,7 @@ U0 CloseApp(U0* appData)
     CloseWindow();
 }
 
-I32 main()
+U0 main()
 {
     App app = InitApp();
 
@@ -200,6 +278,4 @@ I32 main()
     }
 
     CloseApp(&app);
-
-    return 0;
 }
