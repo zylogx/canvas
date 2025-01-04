@@ -146,7 +146,7 @@ void DrawRecToCanvas(const RenderTexture2D canvas, Rectangle* rec, bool* isDrawR
         float top    = (y1 < y2) ? y1 : y2;
         float bottom = (y1 > y2) ? y1 : y2;
 
-        *rec = (Rectangle){ left, top, right - left, bottom - top };
+        *rec = (Rectangle){left, top, right - left, bottom - top};
 
         // Ensure the rectangle is being drawn while dragging
         DrawDottedRec(*rec, BLACK);
@@ -164,7 +164,7 @@ void DrawRecToCanvas(const RenderTexture2D canvas, Rectangle* rec, bool* isDrawR
         BeginTextureMode(canvas);
         
         // Y-flip adjustment for OpenGL
-        Rectangle flippedRec = (Rectangle){ rec->x, canvas.texture.height - (rec->y + rec->height), rec->width, rec->height };
+        Rectangle flippedRec = (Rectangle){rec->x, canvas.texture.height - (rec->y + rec->height), rec->width, rec->height};
         
         // Draw the rectangle with flipped Y-coordinate
         DrawRectangleLinesEx(flippedRec, 1.4f, BLACK);
@@ -227,6 +227,27 @@ static void CheckUndoRedoKeys()
     }
 }
 
+static void Rubber(RenderTexture renderer, Vector2 mousePos)
+{
+    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
+    {
+        Push();
+    }
+
+    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+    {   
+        BeginTextureMode(renderer);
+        
+        // Y-flip adjustment for OpenGL
+        Rectangle flippedRec = (Rectangle){mousePos.x, renderer.texture.height - (mousePos.y + 10), 10, 10};
+        
+        // Draw the rectangle with flipped Y-coordinate
+        DrawRectangleLinesEx(flippedRec, 1.4f, RAYWHITE);
+        
+        EndTextureMode();
+    }
+}
+
 static void DrawSelector(void* appData, Vector2 mousePos)
 {
     App* data = appData;
@@ -286,6 +307,12 @@ static void DrawSelector(void* appData, Vector2 mousePos)
     }
     else if (CheckCollisionPointRec(mousePos, recE))
     {
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+        {
+            // Rubber
+            data->selectedTool = 4;
+        }
+
         DrawRectangleRec(recE, GRAY);
     }
     else if (CheckCollisionPointRec(mousePos, recF))
@@ -367,6 +394,14 @@ void UpdateApp(void* appData)
         else if (data->selectedTool == 2)
         {
             DrawRecToCanvas(data->canvas, &data->rec, &data->isDrawRec);
+        }
+        // else if (data->selectedTool == 3)
+        // {
+        //     
+        // } 
+        else if (data->selectedTool == 4)
+        {
+            Rubber(data->canvas, mousePos);
         }  
     }
 
