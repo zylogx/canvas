@@ -30,7 +30,7 @@ void Push()
     RenderTexture2D savedState = LoadRenderTexture(GetScreenWidth(), GetScreenHeight());
     if (savedState.id == 0)
     {
-        printf("Error: Error - Failed to load render texture!\n");
+        printf("Error: Failed to load render texture!\n");
         return;
     }
 
