@@ -30,7 +30,7 @@ void Push()
     RenderTexture2D savedState = LoadRenderTexture(GetScreenWidth(), GetScreenHeight());
     if (savedState.id == 0)
     {
-        printf("PushState: Error - Failed to load render texture!\n");
+        printf("Error: Error - Failed to load render texture!\n");
         return;
     }
 
@@ -48,7 +48,7 @@ void Undo()
         RenderTexture2D current = LoadRenderTexture(GetScreenWidth(), GetScreenHeight());
         if (current.id == 0)
         {
-            printf("Undo: Error - Failed to load render texture!\n");
+            printf("Error: Failed to load render texture!\n");
             return;
         }
 
@@ -65,7 +65,7 @@ void Undo()
     }
     else
     {
-        printf("Undo: No state to undo.\n");
+        printf("Info: No state to undo.\n");
     }
 }
 
@@ -96,7 +96,7 @@ void Redo()
     }
     else
     {
-        printf("Redo: No state to redo.\n");
+        printf("Info: No state to redo.\n");
     }
 }
 
