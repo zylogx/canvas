@@ -1,26 +1,40 @@
+#pragma once
+
 #include "color_picker.h"
+#include "rendering_state.h"
+
+#define RAYGUI_IMPLEMENTATION
+#include "raygui/src/raygui.h"
+
+typedef struct BrushData
+{
+    float size;
+    Color color;
+} BrushData;
 
 typedef struct 
 {
     RenderTexture2D canvas;
     Rectangle rec;
-    Bool isDrawRec;
+    bool isDrawRec;
     ColorPicker colorPicker;
     Rectangle toolbarRec;
+    int32_t selectedTool;
+    BrushData brushData;
 } App;
 
 typedef struct 
 {
-    I32 x;
-    I32 y;
+    int32_t x;
+    int32_t y;
 } Point;
 
 typedef struct 
 {
     Point* data;
-    Size size;
-    Size capacity;
+    size_t size;
+    size_t capacity;
 } Stack;
 
-const I16 screenWidth = 800;
-const I16 screenHeight = 450;
+const int16_t screenWidth = 800;
+const int16_t screenHeight = 450;

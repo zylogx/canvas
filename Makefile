@@ -1,15 +1,15 @@
 CC = gcc
 CFLAGS = -Wall -std=c23
 LIBS = -lraylib -lm -ldl -lpthread -lGL -lrt -lX11
-SRC = app.c
+SRC = $(wildcard *.c)
 OUT = main
 
-.PHONY: all run clean
+.PHONY: all run clean $(OUT)
 
 all: $(OUT)
 
-$(OUT): $(SRC)
-	$(CC) $(CFLAGS) $(SRC) -o $(OUT) $(LIBS)
+$(OUT):
+	$(CC) $(CFLAGS) $(SRC) -o $@ $(LIBS)
 
 run: $(OUT)
 	./$(OUT)
