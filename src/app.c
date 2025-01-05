@@ -377,7 +377,7 @@ bool DrawToolSizeUpdater(ToolData* tool, Vector2 mousePos, Vector2 pos)
         tool->isUpdate = true;
     }
 
-    int onHover = 0;
+    int8_t onHover = 0;
     if (tool->isUpdate)
     {
         const float y = pos.y + 64.0f;
