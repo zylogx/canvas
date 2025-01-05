@@ -6,6 +6,12 @@
 #define RAYGUI_IMPLEMENTATION
 #include "raygui/src/raygui.h"
 
+typedef struct
+{
+    float size;
+    bool isUpdate;
+} ToolData;
+
 typedef struct BrushData
 {
     float size;
@@ -21,6 +27,7 @@ typedef struct
     Rectangle toolbarRec;
     int32_t selectedTool;
     BrushData brushData;
+    ToolData toolData;
 } App;
 
 typedef struct 
@@ -34,7 +41,7 @@ typedef struct
     Point* data;
     size_t size;
     size_t capacity;
-} Stack;
+} ColorStack;
 
 const int16_t screenWidth = 800;
 const int16_t screenHeight = 450;

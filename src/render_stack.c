@@ -1,4 +1,4 @@
-#include "render_stack.h"
+#include "../include/render_stack.h"
 
 void RenderStackInit(RenderStack* renderStack, size_t initialCapacity)
 {

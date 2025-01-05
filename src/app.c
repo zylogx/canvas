@@ -1,23 +1,25 @@
-#include "app.h"
+#include "../include/app.h"
 
-void StackInit(Stack* stack, size_t capacity) 
+static bool isUpdateToolSize = false;
+
+void ColorStackInit(ColorStack* stack, size_t capacity) 
 {
     stack->data = MemAlloc(capacity*sizeof(Point));
     stack->size = 0;
     stack->capacity = capacity;
 }
 
-void StackFree(Stack* stack) 
+void ColorStackFree(ColorStack* stack) 
 {
     MemFree(stack->data);
 }
 
-bool StackIsEmpty(Stack* stack) 
+bool IsColorStackEmpty(ColorStack* stack) 
 {
     return stack->size == 0;
 }
 
-void StackPush(Stack* stack, Point point) 
+void ColorStackPush(ColorStack* stack, Point point) 
 {
     if (stack->size == stack->capacity) 
     {
@@ -27,7 +29,7 @@ void StackPush(Stack* stack, Point point)
     stack->data[stack->size++] = point;
 }
 
-Point StackPop(Stack* stack) 
+Point ColorStackPop(ColorStack* stack) 
 {
     return stack->data[--stack->size];
 }
@@ -44,16 +46,16 @@ void FloodFill(Image* image, int x, int y, Color targetColor, Color fillColor)
         return;
     }
 
-    Stack stack;
-    StackInit(&stack, 64);
+    ColorStack stack;
+    ColorStackInit(&stack, 64);
 
-    StackPush(&stack, (Point){ x, y });
+    ColorStackPush(&stack, (Point){ x, y });
 
     Color* pixels = (Color*)image->data;
 
-    while (!StackIsEmpty(&stack)) 
+    while (!IsColorStackEmpty(&stack)) 
     {
-        Point p = StackPop(&stack);
+        Point p = ColorStackPop(&stack);
 
         if (p.x < 0 || p.y < 0 || p.x >= image->width || p.y >= image->height) 
         {
@@ -66,14 +68,14 @@ void FloodFill(Image* image, int x, int y, Color targetColor, Color fillColor)
         {
             pixels[p.y * image->width + p.x] = fillColor;
 
-            StackPush(&stack, (Point){ p.x + 1, p.y });
-            StackPush(&stack, (Point){ p.x - 1, p.y });
-            StackPush(&stack, (Point){ p.x, p.y + 1 });
-            StackPush(&stack, (Point){ p.x, p.y - 1 });
+            ColorStackPush(&stack, (Point){ p.x + 1, p.y });
+            ColorStackPush(&stack, (Point){ p.x - 1, p.y });
+            ColorStackPush(&stack, (Point){ p.x, p.y + 1 });
+            ColorStackPush(&stack, (Point){ p.x, p.y - 1 });
         }
     }
 
-    StackFree(&stack);
+    ColorStackFree(&stack);
 }
 
 void DrawDottedRec(Rectangle rec, Color color) 
@@ -227,7 +229,7 @@ static void CheckUndoRedoKeys()
     }
 }
 
-static void Rubber(RenderTexture renderer, Vector2 mousePos)
+static void Rubber(RenderTexture renderer, Vector2 mousePos, float size)
 {
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
     {
@@ -239,7 +241,7 @@ static void Rubber(RenderTexture renderer, Vector2 mousePos)
         BeginTextureMode(renderer);
         
         // Y-flip adjustment for OpenGL
-        Rectangle flippedRec = (Rectangle){mousePos.x, renderer.texture.height - (mousePos.y + 10), 10, 10};
+        Rectangle flippedRec = (Rectangle){mousePos.x, renderer.texture.height - (mousePos.y + 10), size*10, size*10};
         
         // Draw the rectangle with flipped Y-coordinate
         DrawRectangleLinesEx(flippedRec, 1.4f, RAYWHITE);
@@ -358,6 +360,87 @@ static void DrawBrushToCanvas(BrushData brush, RenderTexture2D renderer, Vector2
     }
 }
 
+bool DrawToolSizeUpdater(ToolData* tool, Vector2 mousePos, Vector2 pos)
+{
+    Rectangle rec = {pos.x, pos.y, 45, 62};
+    DrawRectangleLinesEx(rec, 0.8f, BLACK);
+
+    DrawRectangleRec((Rectangle){pos.x + 2, pos.y + 6, 41, 2}, BLACK);
+    DrawRectangleRec((Rectangle){pos.x + 2, pos.y + 11, 41, 5}, BLACK);
+    DrawRectangleRec((Rectangle){pos.x + 2, pos.y + 19, 41, 7}, BLACK);
+    DrawRectangleRec((Rectangle){pos.x + 2, pos.y + 29, 41, 9}, BLACK);
+
+    DrawText("Size", pos.x + 10, pos.y + 45, 12, BLACK);
+
+    if (CheckCollisionPointRec(mousePos, rec) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+    {
+        tool->isUpdate = true;
+    }
+
+    int onHover = 0;
+    if (tool->isUpdate)
+    {
+        const float y = pos.y + 64.0f;
+        Rectangle recA = {pos.x, y + 18*0, 45, 18};
+        Rectangle recB = {pos.x, y + 18*1, 45, 18};
+        Rectangle recC = {pos.x, y + 18*2, 45, 18};
+        Rectangle recD = {pos.x, y + 18*3, 45, 18};
+
+        // Background
+        DrawRectangleRec((Rectangle){pos.x, y, 45, 18*4}, (Color){245, 246, 247, 255});
+
+        if (CheckCollisionPointRec(mousePos, recA))
+        {
+            onHover = 1;
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            {
+                tool->size = 1.0f;
+            }
+        }
+        else if (CheckCollisionPointRec(mousePos, recB))
+        {
+            onHover = 2;
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            {
+                tool->size = 3.0f;
+            }
+        }
+        else if (CheckCollisionPointRec(mousePos, recC))
+        {
+            onHover = 3;
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            {
+                tool->size = 5.0f;
+            }
+        }
+        else if (CheckCollisionPointRec(mousePos, recD))
+        {
+            onHover = 4;
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+            {
+                tool->size = 7.0f;
+            }
+        }
+
+        DrawRectangleLinesEx(recA, 0.8f, BLACK);
+        DrawRectangleLinesEx(recB, 0.8f, BLACK);
+        DrawRectangleLinesEx(recC, 0.8f, BLACK);
+        DrawRectangleLinesEx(recD, 0.8f, BLACK);
+
+        DrawRectangleRec((Rectangle){recA.x + 2, recA.y + 2, recA.width - 4, 4}, (onHover == 1) ? GRAY : BLACK);
+        DrawRectangleRec((Rectangle){recB.x + 2, recB.y + 2, recB.width - 4, 7}, (onHover == 2) ? GRAY : BLACK);
+        DrawRectangleRec((Rectangle){recC.x + 2, recC.y + 2, recC.width - 4, 9}, (onHover == 3) ? GRAY : BLACK);
+        DrawRectangleRec((Rectangle){recD.x + 2, recD.y + 2, recD.width - 4, 11}, (onHover == 4) ? GRAY : BLACK);
+    }
+
+    if (tool->isUpdate && onHover != 0 && IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
+    {
+        tool->isUpdate = !tool->isUpdate;
+    }
+
+    return tool->isUpdate;
+}
+
 void UpdateApp(void* appData)
 {
     App* data = appData;
@@ -375,10 +458,12 @@ void UpdateApp(void* appData)
     BeginDrawing();
     DrawCanvas(data->canvas);
 
-    if (!CheckCollisionPointRec(mousePos, data->toolbarRec))
+    if (!CheckCollisionPointRec(mousePos, data->toolbarRec) && !isUpdateToolSize)
     {
         if (data->selectedTool == 0)
         {
+            data->brushData.size = data->toolData.size;
+
             DrawBrushToCanvas(data->brushData, data->canvas, mousePos);
         }
         else if (data->selectedTool == 1)
@@ -401,7 +486,7 @@ void UpdateApp(void* appData)
         // } 
         else if (data->selectedTool == 4)
         {
-            Rubber(data->canvas, mousePos);
+            Rubber(data->canvas, mousePos, data->toolData.size);
         }  
     }
 
@@ -439,6 +524,8 @@ void UpdateApp(void* appData)
     GuiDrawIcon(ICON_UNDO, undoRec.x + 4, undoRec.y + 4, 1, BLACK);
     GuiDrawIcon(ICON_REDO, redoRec.x + 4, redoRec.y + 4, 1, BLACK);
 
+    isUpdateToolSize = DrawToolSizeUpdater(&data->toolData, mousePos, (Vector2){310.0f, 11.0f});
+
     DrawColorPicker(&data->colorPicker, mousePos);
     DrawFPS(5, 100);
     EndDrawing();
@@ -467,6 +554,8 @@ App InitApp()
 
     appData.brushData.color = BLACK;
     appData.brushData.size = 6.0f;
+
+    appData.toolData.size = 1.0f;
 
     return appData;
 }

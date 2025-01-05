@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -Wall -std=c23
 LIBS = -lraylib -lm -ldl -lpthread -lGL -lrt -lX11
-SRC = $(wildcard *.c)
+SRC = $(wildcard src/*.c)
 OUT = main
 
 .PHONY: all run clean $(OUT)

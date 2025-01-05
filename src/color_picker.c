@@ -1,4 +1,4 @@
-#include "color_picker.h"
+#include "../include/color_picker.h"
 
 void InitColorPicker(ColorPicker* picker)
 {

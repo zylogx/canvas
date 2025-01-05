@@ -1,4 +1,4 @@
-#include "rendering_state.h"
+#include "../include/rendering_state.h"
 
 #include <stdlib.h>
 #include <stdio.h>
