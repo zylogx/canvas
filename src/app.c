@@ -458,10 +458,6 @@ App InitApp()
     App appData = {0};
     appData.canvas = InitCanvas(GetScreenWidth(), GetScreenHeight());
     
-    BeginTextureMode(appData.canvas.renderer);
-    ClearBackground(RAYWHITE);
-    EndTextureMode();
-    
     appData.rec = (Rectangle){0};
     appData.isDrawRec = false;
     

@@ -13,5 +13,8 @@ typedef struct
 // Initialize the canvas
 Canvas InitCanvas(float width, float height);
 
+// Update the canvas
+void UpdateCanvas(Canvas* canvas);
+
 // Draw the canvas
 void DrawCanvas(Canvas* canvas);

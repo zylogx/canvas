@@ -9,7 +9,16 @@ Canvas InitCanvas(float width, float height)
 
     canvas.renderer = LoadRenderTexture(width, height);
 
+    BeginTextureMode(canvas.renderer);
+    ClearBackground(RAYWHITE);
+    EndTextureMode();
+
     return canvas;
+}
+
+void UpdateCanvas(Canvas* canvas)
+{
+
 }
 
 void DrawCanvas(Canvas* canvas)
