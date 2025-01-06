@@ -7,12 +7,12 @@ void InitColorPicker(ColorPicker* picker)
     picker->isShowColorPicker = false;
 }
 
-Color GetColorPickerCurrentColor(const ColorPicker picker)
+Color GetColorPickerCurrentColor(ColorPicker picker)
 {
     return picker.currentColor;
 }
 
-bool IsColorPickerShown(const ColorPicker picker)
+bool IsColorPickerShown(ColorPicker picker)
 {
     return picker.isShowColorPicker;
 }
@@ -87,4 +87,43 @@ void DrawColorPicker(ColorPicker* picker, Vector2 mousePos)
     DrawRectangleRec((Rectangle){picker->pos.x + 4, picker->pos.y + 4, 30, 30}, picker->currentColor);
     DrawText("Color", picker->pos.x + 5, picker->pos.y + 40, 12, BLACK);
     DrawRectangleLinesEx((Rectangle){picker->pos.x - 4, picker->pos.y - 4, 280, 62}, 0.6f, DARKGRAY);
+}
+
+void FloodFill(Image* image, int x, int y, Color targetColor, Color fillColor) 
+{
+    if (!image || !image->data) 
+    {
+        return;
+    }
+
+    ColorStack stack;
+    ColorStackInit(&stack, 64);
+
+    ColorStackPush(&stack, (Point){ x, y });
+
+    Color* pixels = (Color*)image->data;
+
+    while (!IsColorStackEmpty(&stack)) 
+    {
+        Point p = ColorStackPop(&stack);
+
+        if (p.x < 0 || p.y < 0 || p.x >= image->width || p.y >= image->height) 
+        {
+            continue;
+        }
+
+        Color currentColor = pixels[p.y * image->width + p.x];
+
+        if (ColorIsEqual(currentColor, targetColor)) 
+        {
+            pixels[p.y * image->width + p.x] = fillColor;
+
+            ColorStackPush(&stack, (Point){ p.x + 1, p.y });
+            ColorStackPush(&stack, (Point){ p.x - 1, p.y });
+            ColorStackPush(&stack, (Point){ p.x, p.y + 1 });
+            ColorStackPush(&stack, (Point){ p.x, p.y - 1 });
+        }
+    }
+
+    ColorStackFree(&stack);
 }

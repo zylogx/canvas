@@ -2,82 +2,6 @@
 
 static bool isUpdateToolSize = false;
 
-void ColorStackInit(ColorStack* stack, size_t capacity) 
-{
-    stack->data = MemAlloc(capacity*sizeof(Point));
-    stack->size = 0;
-    stack->capacity = capacity;
-}
-
-void ColorStackFree(ColorStack* stack) 
-{
-    MemFree(stack->data);
-}
-
-bool IsColorStackEmpty(ColorStack* stack) 
-{
-    return stack->size == 0;
-}
-
-void ColorStackPush(ColorStack* stack, Point point) 
-{
-    if (stack->size == stack->capacity) 
-    {
-        stack->capacity *= 2;
-        stack->data = MemRealloc(stack->data, stack->capacity*sizeof(Point));
-    }
-    stack->data[stack->size++] = point;
-}
-
-Point ColorStackPop(ColorStack* stack) 
-{
-    return stack->data[--stack->size];
-}
-
-bool ColorsEqual(Color c1, Color c2) 
-{
-    return c1.r == c2.r && c1.g == c2.g && c1.b == c2.b && c1.a == c2.a;
-}
-
-void FloodFill(Image* image, int x, int y, Color targetColor, Color fillColor) 
-{
-    if (!image || !image->data) 
-    {
-        return;
-    }
-
-    ColorStack stack;
-    ColorStackInit(&stack, 64);
-
-    ColorStackPush(&stack, (Point){ x, y });
-
-    Color* pixels = (Color*)image->data;
-
-    while (!IsColorStackEmpty(&stack)) 
-    {
-        Point p = ColorStackPop(&stack);
-
-        if (p.x < 0 || p.y < 0 || p.x >= image->width || p.y >= image->height) 
-        {
-            continue;
-        }
-
-        Color currentColor = pixels[p.y * image->width + p.x];
-
-        if (ColorsEqual(currentColor, targetColor)) 
-        {
-            pixels[p.y * image->width + p.x] = fillColor;
-
-            ColorStackPush(&stack, (Point){ p.x + 1, p.y });
-            ColorStackPush(&stack, (Point){ p.x - 1, p.y });
-            ColorStackPush(&stack, (Point){ p.x, p.y + 1 });
-            ColorStackPush(&stack, (Point){ p.x, p.y - 1 });
-        }
-    }
-
-    ColorStackFree(&stack);
-}
-
 void DrawDottedRec(Rectangle rec, Color color) 
 {
     const float dotLength = 10.0f;
@@ -110,17 +34,6 @@ void DrawDottedRec(Rectangle rec, Color color)
         float nextY = fmaxf(currentY - dotLength, rec.y);
         DrawLine((int16_t)rec.x, (int16_t)currentY, (int16_t)rec.x, (int16_t)nextY, color);
     }
-}
-
-void DrawCanvas(const RenderTexture2D target)
-{
-    ClearBackground(RAYWHITE);
-    DrawTextureRec(
-        target.texture, 
-        (Rectangle) { 0, 0, (float)target.texture.width, (float)target.texture.height }, 
-        (Vector2) { 0, 0 }, 
-        WHITE
-    );
 }
 
 void DrawRecToCanvas(const RenderTexture2D canvas, Rectangle* rec, bool* isDrawRec)
@@ -190,7 +103,7 @@ static void PaintBucket(const RenderTexture2D canvas, int32_t mouseX, int32_t mo
     Color fillColor = color;
 
     // Exit early if the target color is the same as the fill color
-    if (ColorsEqual(targetColor, fillColor)) 
+    if (ColorIsEqual(targetColor, fillColor)) 
     {
         UnloadImage(imageA);
         return;
@@ -219,13 +132,18 @@ static void PaintBucket(const RenderTexture2D canvas, int32_t mouseX, int32_t mo
 
 static void CheckUndoRedoKeys()
 {
-    if (IsKeyPressed(KEY_Z) && (IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL))) 
+    const bool isControlDown = IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL);
+
+    if (isControlDown)
     {
-        Undo();
-    }
-    else if (IsKeyPressed(KEY_Y) && (IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL))) 
-    {
-        Redo();
+        if (IsKeyPressed(KEY_Z))
+        {
+            Undo();
+        }
+        else if (IsKeyPressed(KEY_Y))
+        {
+            Redo();
+        }
     }
 }
 
@@ -451,12 +369,12 @@ void UpdateApp(void* appData)
 
     CheckUndoRedoKeys();
 
-    UpdateRenderingState(&data->canvas);
+    UpdateRenderingState(&data->canvas.renderer);
 
     data->brushData.color = currentColor;
 
     BeginDrawing();
-    DrawCanvas(data->canvas);
+    DrawCanvas(&data->canvas);
 
     if (!CheckCollisionPointRec(mousePos, data->toolbarRec) && !isUpdateToolSize)
     {
@@ -464,7 +382,7 @@ void UpdateApp(void* appData)
         {
             data->brushData.size = data->toolData.size;
 
-            DrawBrushToCanvas(data->brushData, data->canvas, mousePos);
+            DrawBrushToCanvas(data->brushData, data->canvas.renderer, mousePos);
         }
         else if (data->selectedTool == 1)
         {
@@ -473,12 +391,12 @@ void UpdateApp(void* appData)
                 int32_t mouseX = (int32_t)mousePos.x;
                 int32_t mouseY = (int32_t)mousePos.y;
 
-                PaintBucket(data->canvas, mouseX, mouseY, currentColor);
+                PaintBucket(data->canvas.renderer, mouseX, mouseY, currentColor);
             }
         }
         else if (data->selectedTool == 2)
         {
-            DrawRecToCanvas(data->canvas, &data->rec, &data->isDrawRec);
+            DrawRecToCanvas(data->canvas.renderer, &data->rec, &data->isDrawRec);
         }
         // else if (data->selectedTool == 3)
         // {
@@ -486,7 +404,7 @@ void UpdateApp(void* appData)
         // } 
         else if (data->selectedTool == 4)
         {
-            Rubber(data->canvas, mousePos, data->toolData.size);
+            Rubber(data->canvas.renderer, mousePos, data->toolData.size);
         }  
     }
 
@@ -538,9 +456,9 @@ App InitApp()
     SetExitKey(0);
 
     App appData = {0};
-    appData.canvas = LoadRenderTexture(GetScreenWidth(), GetScreenHeight());
+    appData.canvas = InitCanvas(GetScreenWidth(), GetScreenHeight());
     
-    BeginTextureMode(appData.canvas);
+    BeginTextureMode(appData.canvas.renderer);
     ClearBackground(RAYWHITE);
     EndTextureMode();
     
@@ -548,7 +466,7 @@ App InitApp()
     appData.isDrawRec = false;
     
     InitColorPicker(&appData.colorPicker);
-    InitRenderingState(&appData.canvas);
+    InitRenderingState(&appData.canvas.renderer);
 
     appData.toolbarRec = (Rectangle){0.0f, 0.0f, GetScreenWidth(), 90.0f};
 
@@ -565,7 +483,7 @@ void CloseApp(void* appData)
     App* data = appData;
 
     ClearRenderingState();
-    UnloadRenderTexture(data->canvas);
+    UnloadRenderTexture(data->canvas.renderer);
     CloseWindow();
 }
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "color_picker.h"
+#include "canvas.h"
 #include "rendering_state.h"
 
 #define RAYGUI_IMPLEMENTATION
@@ -20,7 +21,7 @@ typedef struct BrushData
 
 typedef struct 
 {
-    RenderTexture2D canvas;
+    Canvas canvas;
     Rectangle rec;
     bool isDrawRec;
     ColorPicker colorPicker;
@@ -29,19 +30,6 @@ typedef struct
     BrushData brushData;
     ToolData toolData;
 } App;
-
-typedef struct 
-{
-    int32_t x;
-    int32_t y;
-} Point;
-
-typedef struct 
-{
-    Point* data;
-    size_t size;
-    size_t capacity;
-} ColorStack;
 
 const int16_t screenWidth = 800;
 const int16_t screenHeight = 450;
