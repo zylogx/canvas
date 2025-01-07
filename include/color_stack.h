@@ -20,7 +20,7 @@ void ColorStackPush(ColorStack* stack, Point point);
 Point ColorStackPop(ColorStack* stack);
 
 // Check if the ColorStack is empty
-bool IsColorStackEmpty(ColorStack* stack);
+bool IsColorStackEmpty(const ColorStack* stack);
 
 // Free the ColorStack memory
 void ColorStackFree(ColorStack* stack);

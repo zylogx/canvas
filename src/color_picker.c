@@ -37,8 +37,8 @@ void DrawColorPicker(ColorPicker* picker, Vector2 mousePos)
 
     for (uint16_t i = 0; i < 10; i++)
     {
-        Rectangle recA = {40 + picker->pos.x + 19 * i, picker->pos.y + 19 * 0, 16, 16};
-        Rectangle recB = {40 + picker->pos.x + 19 * i, picker->pos.y + 19 * 1, 16, 16};
+        Rectangle recA = {40 + picker->pos.x + 19*i, picker->pos.y + 19*0, 16, 16};
+        Rectangle recB = {40 + picker->pos.x + 19*i, picker->pos.y + 19*1, 16, 16};
 
         Color colorA = colorsA[i];
         Color colorB = colorsB[i];
@@ -49,7 +49,7 @@ void DrawColorPicker(ColorPicker* picker, Vector2 mousePos)
         DrawRectangleLinesEx(recA, 0.6f, DARKGRAY);
         DrawRectangleLinesEx(recB, 0.6f, DARKGRAY);
 
-        DrawRectangleLinesEx((Rectangle){40 + picker->pos.x + 19 * i, picker->pos.y + 19 * 2, 16, 16}, 0.6f, DARKGRAY);
+        DrawRectangleLinesEx((Rectangle){40 + picker->pos.x + 19*i, picker->pos.y + 19*2, 16, 16}, 0.6f, DARKGRAY);
 
         if (!picker->isShowColorPicker)
         {
@@ -112,11 +112,11 @@ void FloodFill(Image* image, int x, int y, Color targetColor, Color fillColor)
             continue;
         }
 
-        Color currentColor = pixels[p.y * image->width + p.x];
+        Color currentColor = pixels[p.y*image->width + p.x];
 
         if (ColorIsEqual(currentColor, targetColor)) 
         {
-            pixels[p.y * image->width + p.x] = fillColor;
+            pixels[p.y*image->width + p.x] = fillColor;
 
             ColorStackPush(&stack, (Point){ p.x + 1, p.y });
             ColorStackPush(&stack, (Point){ p.x - 1, p.y });

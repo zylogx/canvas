@@ -1,5 +1,3 @@
-#pragma once
-
 // constexpr specifier (since C23)
 // https://en.cppreference.com/w/c/language/constexpr
 

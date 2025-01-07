@@ -31,5 +31,5 @@ typedef struct
     ToolData toolData;
 } App;
 
-const int16_t screenWidth = 800;
-const int16_t screenHeight = 450;
+const int16_t screenWidth = 1080;
+const int16_t screenHeight = 720;

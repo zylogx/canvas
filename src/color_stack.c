@@ -22,7 +22,7 @@ Point ColorStackPop(ColorStack* stack)
     return stack->data[--stack->size];
 }
 
-bool IsColorStackEmpty(ColorStack* stack) 
+bool IsColorStackEmpty(const ColorStack* stack) 
 {
     return stack->size == 0;
 }

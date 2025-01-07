@@ -16,7 +16,7 @@ void RenderStackPush(RenderStack* renderStack, RenderTexture2D texture)
 {
     if (renderStack->size == renderStack->capacity)
     {
-        size_t newCapacity = renderStack->capacity * 2;
+        size_t newCapacity = renderStack->capacity*2;
         RenderTexture2D* newData = MemRealloc(renderStack->data, newCapacity*sizeof(RenderTexture2D));
         if (newData == NULL)
         {
