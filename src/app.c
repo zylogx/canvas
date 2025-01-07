@@ -369,7 +369,7 @@ void UpdateApp(void* appData)
 
     CheckUndoRedoKeys();
 
-    UpdateRenderingState(&data->canvas.renderer);
+    UpdateRenderingState(&data->canvas);
 
     data->brushData.color = currentColor;
 
@@ -462,7 +462,7 @@ App InitApp()
     appData.isDrawRec = false;
     
     InitColorPicker(&appData.colorPicker);
-    InitRenderingState(&appData.canvas.renderer);
+    InitRenderingState(&appData.canvas);
 
     appData.toolbarRec = (Rectangle){0.0f, 0.0f, GetScreenWidth(), 90.0f};
 

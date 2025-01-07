@@ -8,14 +8,14 @@
 static RenderStack undoStack = {0};
 static RenderStack redoStack = {0};
 
-static RenderTexture2D* renderCanvas = NULL;
+static Canvas* renderCanvas = NULL;
 
-void UpdateRenderingState(RenderTexture2D* canvas)
+void UpdateRenderingState(Canvas* canvas)
 {
     renderCanvas = canvas;
 }
 
-void InitRenderingState(RenderTexture2D* canvas)
+void InitRenderingState(Canvas* canvas)
 {
     renderCanvas = canvas;
 
@@ -35,7 +35,7 @@ void Push()
     }
 
     BeginTextureMode(savedState);
-    DrawTexture(renderCanvas->texture, 0, 0, WHITE);
+    DrawTexture(renderCanvas->renderer.texture, 0, 0, WHITE);
     EndTextureMode();
 
     RenderStackPush(&undoStack, savedState);
@@ -53,12 +53,12 @@ void Undo()
         }
 
         BeginTextureMode(current);
-        DrawTexture(renderCanvas->texture, 0, 0, WHITE);
+        DrawTexture(renderCanvas->renderer.texture, 0, 0, WHITE);
         EndTextureMode();
         RenderStackPush(&redoStack, current);
 
         RenderTexture2D lastState = RenderStackPop(&undoStack);
-        BeginTextureMode(*renderCanvas);
+        BeginTextureMode(renderCanvas->renderer);
         DrawTexture(lastState.texture, 0, 0, WHITE);
         EndTextureMode();
         UnloadRenderTexture(lastState);
@@ -82,13 +82,13 @@ void Redo()
         }
 
         BeginTextureMode(savedState);
-        DrawTexture(renderCanvas->texture, 0, 0, WHITE);
+        DrawTexture(renderCanvas->renderer.texture, 0, 0, WHITE);
         EndTextureMode();
         RenderStackPush(&undoStack, savedState);
 
         // Pop the last state from redo stack and apply it to the canvas
         RenderTexture2D redoState = RenderStackPop(&redoStack);
-        BeginTextureMode(*renderCanvas);
+        BeginTextureMode(renderCanvas->renderer);
         DrawTexture(redoState.texture, 0, 0, WHITE);
         EndTextureMode();
 
