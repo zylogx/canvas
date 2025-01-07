@@ -74,7 +74,7 @@ void DrawRecToCanvas(const RenderTexture2D canvas, Rectangle* rec, bool* isDrawR
 
     if (*isDrawRec)
     {
-        Push();
+        GetRenderingState()->Push();
 
         BeginTextureMode(canvas);
         
@@ -112,7 +112,7 @@ static void PaintBucket(const RenderTexture2D canvas, int32_t mouseX, int32_t mo
     {
         UnloadImage(imageA);
 
-        Push();
+        GetRenderingState()->Push();
 
         Image imageB = LoadImageFromTexture(canvas.texture);
 
@@ -138,11 +138,11 @@ static void CheckUndoRedoKeys()
     {
         if (IsKeyPressed(KEY_Z))
         {
-            Undo();
+            GetRenderingState()->Undo();
         }
         else if (IsKeyPressed(KEY_Y))
         {
-            Redo();
+            GetRenderingState()->Redo();
         }
     }
 }
@@ -151,7 +151,7 @@ static void Rubber(RenderTexture renderer, Vector2 mousePos, float size)
 {
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
     {
-        Push();
+        GetRenderingState()->Push();
     }
 
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
@@ -170,7 +170,7 @@ static void Rubber(RenderTexture renderer, Vector2 mousePos, float size)
 
 static void DrawSelector(void* appData, Vector2 mousePos)
 {
-    App* data = appData;
+    App* data = (App*)appData;
 
     // Define selector position and size
     Vector2 pos = {380.0f, 15.0f};
@@ -261,7 +261,7 @@ static void DrawBrushToCanvas(BrushData brush, RenderTexture2D renderer, Vector2
 {
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
     {
-        Push();
+        GetRenderingState()->Push();
     }
 
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
@@ -361,7 +361,7 @@ bool DrawToolSizeUpdater(ToolData* tool, Vector2 mousePos, Vector2 pos)
 
 void UpdateApp(void* appData)
 {
-    App* data = appData;
+    App* data = (App*)appData;
 
     Vector2 mousePos = GetMousePosition();
 
@@ -369,7 +369,7 @@ void UpdateApp(void* appData)
 
     CheckUndoRedoKeys();
 
-    UpdateRenderingState(&data->canvas);
+    //UpdateRenderingState(&data->canvas);
 
     data->brushData.color = currentColor;
 
@@ -420,7 +420,7 @@ void UpdateApp(void* appData)
 
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
         {
-            Undo();
+            GetRenderingState()->Undo();
         }
     }
 
@@ -430,7 +430,7 @@ void UpdateApp(void* appData)
 
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
         {
-            Redo();
+            GetRenderingState()->Redo();
         }
     }
 
@@ -462,7 +462,7 @@ App InitApp()
     appData.isDrawRec = false;
     
     InitColorPicker(&appData.colorPicker);
-    InitRenderingState(&appData.canvas);
+    InitRenderingState(appData.canvas);
 
     appData.toolbarRec = (Rectangle){0.0f, 0.0f, GetScreenWidth(), 90.0f};
 
@@ -476,9 +476,8 @@ App InitApp()
 
 void CloseApp(void* appData)
 {
-    App* data = appData;
+    App* data = (App*)appData;
 
-    ClearRenderingState();
     UnloadRenderTexture(data->canvas.renderer);
     CloseWindow();
 }

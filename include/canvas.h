@@ -3,12 +3,12 @@
 #include "raylib.h"
 #include "constant.h"
 
-typedef struct
+struct Canvas
 {
     RenderTexture2D renderer;
     float width;
     float height;
-} Canvas;
+};
 
 // Initialize the canvas
 Canvas InitCanvas(float width, float height);

@@ -1,7 +1,7 @@
-CC = gcc
-CFLAGS = -Wall -std=c23
+CC = g++
+CFLAGS = -Wall -std=gnu++20
 LIBS = -lraylib -lm -ldl -lpthread -lGL -lrt -lX11
-SRC = $(wildcard src/*.c)
+SRC = $(wildcard src/*.cpp)
 OUT = main
 
 .PHONY: all run clean $(OUT)

@@ -2,7 +2,7 @@
 
 void RenderStackInit(RenderStack* renderStack, size_t initialCapacity)
 {
-    renderStack->data = MemAlloc(initialCapacity*sizeof(RenderTexture2D));
+    renderStack->data = (RenderTexture2D*)MemAlloc(initialCapacity*sizeof(RenderTexture2D));
     if (renderStack->data == NULL)
     {
         perror("Failed to allocate memory");
@@ -17,7 +17,7 @@ void RenderStackPush(RenderStack* renderStack, RenderTexture2D texture)
     if (renderStack->size == renderStack->capacity)
     {
         size_t newCapacity = renderStack->capacity*2;
-        RenderTexture2D* newData = MemRealloc(renderStack->data, newCapacity*sizeof(RenderTexture2D));
+        RenderTexture2D* newData = (RenderTexture2D*)MemRealloc(renderStack->data, newCapacity*sizeof(RenderTexture2D));
         if (newData == NULL)
         {
             perror("Failed to reallocate memory");

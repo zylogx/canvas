@@ -18,7 +18,7 @@ Canvas InitCanvas(float width, float height)
 
 void UpdateCanvas(Canvas* canvas)
 {
-
+    
 }
 
 void DrawCanvas(Canvas* canvas)

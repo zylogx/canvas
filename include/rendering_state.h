@@ -1,23 +1,31 @@
 #pragma once
 
 #include "raylib.h"
-#include "canvas.h"
-#include "render_stack.h"
 
-// Push a new rendering state onto the stack
-void Push();
+#include <memory>
+#include <stack>
 
-// Undo the last rendering operation
-void Undo();
+template <typename T>
+class RenderingState
+{
+private:
+    std::stack<RenderTexture2D> undoStack {};
+    std::stack<RenderTexture2D> redoStack {};
+    T* canvas {nullptr};
 
-// Redo the last undone rendering operation
-void Redo();
+public:
+    void Init(T* appCanvas);
+    void Push();
+    void Undo();
+    void Redo();
+    void Clear();
+};
 
-// Initialize the rendering state with a given canvas
-void InitRenderingState(Canvas* canvas);
+class Canvas;
 
-// Update the current rendering state with changes to the canvas
-void UpdateRenderingState(Canvas* canvas);
+void InitRenderingState(Canvas& canvas);
 
-// Clear all rendering states from the stack
-void ClearRenderingState();
+std::shared_ptr<RenderingState<Canvas>> GetRenderingState();
+
+// Declare explicit instantiation
+extern template class RenderingState<Canvas>;
