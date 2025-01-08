@@ -4,8 +4,9 @@
 
 #pragma once
 
-#include "color_picker.h"
 #include "canvas.h"
+#include "rectangle.h"
+#include "color_picker.h"
 #include "rendering_state.h"
 
 #define RAYGUI_IMPLEMENTATION

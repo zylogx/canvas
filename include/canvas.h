@@ -6,6 +6,8 @@
 
 #include "raylib.h"
 #include "constant.h"
+#include "rectangle.h"
+#include "canvas_state.h"
 
 struct Canvas
 {
@@ -15,7 +17,7 @@ struct Canvas
 };
 
 // Initialize the canvas
-Canvas InitCanvas(float width, float height);
+Canvas InitCanvas();
 
 // Update the canvas
 void UpdateCanvas(Canvas* canvas, Vector2 mousePos);

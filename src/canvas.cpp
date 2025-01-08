@@ -9,17 +9,12 @@ static Rectangle updateRecA {0};
 static Rectangle updateRecB {0};
 static bool isUpdateCanvasSize {false};
 static int canvasUpdateT {0};
-static Vector2 canvasViewMousePos {0};
-static bool isOnCanvas {false};
 
-Canvas InitCanvas(float width, float height)
+Canvas InitCanvas()
 {
     Canvas canvas = {0};
 
-    canvas.width = width;
-    canvas.height = height;
-
-    canvas.renderer = LoadRenderTexture(width, height);
+    canvas.renderer = LoadRenderTexture(canvas.width, canvas.height);
 
     BeginTextureMode(canvas.renderer);
     ClearBackground(RAYWHITE);
@@ -32,6 +27,13 @@ void UpdateCanvas(Canvas* canvas, Vector2 mousePos)
 {
     // Update the canvas rec
     rec = {canvasPosX, canvasPosY, canvas->width, canvas->height};
+
+    // Update the canvas rec
+    rec = { canvasPosX, canvasPosY, canvas->width, canvas->height };
+
+    // Update the recs used to update the canvas size
+    updateRecA = { canvas->width + 20, canvas->height + canvasPosY, 10, 8 };
+    updateRecB = { canvas->width + 20, (canvas->height + canvasPosY) / 2 + 50, 10, 8 };
 
     if (CheckCollisionPointRec(mousePos, updateRecA) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) 
     {
@@ -76,15 +78,45 @@ void UpdateCanvas(Canvas* canvas, Vector2 mousePos)
 
         isUpdateCanvasSize = false;
     }
+
+    if (isUpdateCanvasSize) 
+    {
+        DisableCanvas();
+
+        if (canvasUpdateT == 0) 
+        {
+            if (mousePos.x > canvasPosX && mousePos.y > canvasPosY) 
+            {
+                canvas->width = mousePos.x - canvasPosX;
+                canvas->height = mousePos.y - canvasPosY;
+            }
+        } 
+        else 
+        {
+            if (mousePos.x > canvasPosX) 
+            {
+                canvas->width = mousePos.x - canvasPosX;
+            }
+        }
+    }
 }
 
 void DrawCanvas(Canvas* canvas)
 {
-    ClearBackground(RAYWHITE);
-    DrawTextureRec(
-        canvas->renderer.texture, 
+    DrawTexturePro(
+        canvas->renderer.texture,
         (Rectangle) {0, 0, (float)canvas->renderer.texture.width, (float)canvas->renderer.texture.height}, 
-        (Vector2) {0.0f, 0.0f}, 
+        (Rectangle) {canvasPosX, canvasPosY, (float)canvas->renderer.texture.width, (float)canvas->renderer.texture.height}, 
+        (Vector2) {0.0f, 0.0f},
+        0.0f, 
         WHITE
     );
+
+    if (isUpdateCanvasSize)
+    {
+        DrawDottedRec(rec, BLACK);
+    }
+
+    DrawRectangleRec(updateRecA, DARKGRAY);
+    DrawRectangleRec(updateRecB, DARKGRAY);
 }
