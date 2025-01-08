@@ -1,3 +1,7 @@
+/**
+* Author: Wildan R Wijanarko
+*/
+
 #include "../include/app.h"
 
 static bool isUpdateToolSize = false;
@@ -369,9 +373,9 @@ void UpdateApp(void* appData)
 
     CheckUndoRedoKeys();
 
-    //UpdateRenderingState(&data->canvas);
-
     data->brushData.color = currentColor;
+
+    UpdateCanvas(&data->canvas, mousePos);
 
     BeginDrawing();
     DrawCanvas(&data->canvas);

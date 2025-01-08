@@ -1,3 +1,7 @@
+/**
+* Author: Wildan R Wijanarko
+*/
+
 #include "../include/color_picker.h"
 
 void InitColorPicker(ColorPicker* picker)
@@ -103,7 +107,7 @@ void FloodFill(Image* image, int x, int y, Color targetColor, Color fillColor)
 
     Color* pixels = (Color*)image->data;
 
-    while (!IsColorStackEmpty(&stack)) 
+    while (!stack.IsEmpty()) 
     {
         Point p = ColorStackPop(&stack);
 

@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -Wall -std=gnu++20
+CFLAGS = -Wall -std=c++23
 LIBS = -lraylib -lm -ldl -lpthread -lGL -lrt -lX11
 SRC = $(wildcard src/*.cpp)
 OUT = main

@@ -1,3 +1,7 @@
+/**
+* Author: Wildan R Wijanarko
+*/
+
 #pragma once
 
 #include "color_picker.h"
@@ -7,19 +11,19 @@
 #define RAYGUI_IMPLEMENTATION
 #include "raygui/src/raygui.h"
 
-typedef struct
+struct ToolData
 {
     float size;
     bool isUpdate;
-} ToolData;
+};
 
-typedef struct BrushData
+struct BrushData
 {
     float size;
     Color color;
-} BrushData;
+};
 
-typedef struct 
+struct App
 {
     Canvas canvas;
     Rectangle rec;
@@ -29,7 +33,7 @@ typedef struct
     int32_t selectedTool;
     BrushData brushData;
     ToolData toolData;
-} App;
+};
 
 const int16_t screenWidth = 1080;
 const int16_t screenHeight = 720;

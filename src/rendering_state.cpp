@@ -1,3 +1,7 @@
+/**
+* Author: Wildan R Wijanarko
+*/
+
 #include "../include/rendering_state.h"
 #include "../include/canvas.h"
 

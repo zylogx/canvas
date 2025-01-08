@@ -1,3 +1,7 @@
+/**
+* Author: Wildan R Wijanarko
+*/
+
 #include "../include/color_stack.h"
 
 void ColorStackInit(ColorStack* stack, size_t capacity) 
@@ -20,11 +24,6 @@ void ColorStackPush(ColorStack* stack, Point point)
 Point ColorStackPop(ColorStack* stack) 
 {
     return stack->data[--stack->size];
-}
-
-bool IsColorStackEmpty(const ColorStack* stack) 
-{
-    return stack->size == 0;
 }
 
 void ColorStackFree(ColorStack* stack) 

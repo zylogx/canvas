@@ -1,3 +1,7 @@
+/**
+* Author: Wildan R Wijanarko
+*/
+
 #pragma once
 
 #include "raylib.h"
@@ -6,12 +10,12 @@
 
 #include <stdint.h>
 
-typedef struct ColorPicker
+struct ColorPicker
 {
     Vector2 pos;
     Color currentColor;
     bool isShowColorPicker;
-} ColorPicker;
+};
 
 // Initialize the color picker with default or specific settings
 void InitColorPicker(ColorPicker* picker);
