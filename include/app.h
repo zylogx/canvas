@@ -13,8 +13,12 @@
 #define RAYGUI_IMPLEMENTATION
 #include "raygui/src/raygui.h"
 
-struct App
+const int16_t screenWidth = 1080;
+const int16_t screenHeight = 720;
+
+class App
 {
+private:
     Canvas canvas;
     Rectangle rec;
     bool isDrawRec;
@@ -22,7 +26,35 @@ struct App
     Rectangle toolbarRec;
     BrushData brushData;
     ToolData toolData;
-};
 
-const int16_t screenWidth = 1080;
-const int16_t screenHeight = 720;
+public:
+    App()
+    {
+        InitWindow(screenWidth, screenHeight, "");
+        SetTargetFPS(120);
+        SetExitKey(0);
+        canvas = InitCanvas();
+        
+        rec = (Rectangle){0};
+        isDrawRec = false;
+        
+        InitColorPicker(&colorPicker);
+        InitRenderingState(canvas);
+
+        toolbarRec = (Rectangle){0.0f, 0.0f, GetScreenWidth(), 90.0f};
+
+        brushData.color = BLACK;
+        brushData.size = 6.0f;
+
+        toolData.size = 1.0f;
+    }
+
+    ~App()
+    {
+        UnloadRenderTexture(canvas.renderer);
+        CloseWindow();
+    }
+
+    // Run the app
+    void Run();
+};

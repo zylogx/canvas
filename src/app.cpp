@@ -23,9 +23,9 @@ static void CheckUndoRedoKeys()
     }
 }
 
-void UpdateApp(void* appData)
+void App::Run()
 {
-    App* data = (App*)appData;
+    auto* data = (this);
 
     Vector2 mousePos = GetMousePosition();
 
@@ -37,6 +37,7 @@ void UpdateApp(void* appData)
         data->brushData.color = currentColor;
         mousePos = GetMousePosition();
         currentColor = GetColorPickerCurrentColor(data->colorPicker);
+        data->toolData.isUpdate = isUpdateToolSize;
         UpdateCanvas(&data->canvas, mousePos);
     };
 
@@ -130,44 +131,10 @@ void UpdateApp(void* appData)
     }
 }
 
-App InitApp()
-{
-    InitWindow(screenWidth, screenHeight, "");
-    SetTargetFPS(120);
-    SetExitKey(0);
-
-    App appData = {0};
-    appData.canvas = InitCanvas();
-    
-    appData.rec = (Rectangle){0};
-    appData.isDrawRec = false;
-    
-    InitColorPicker(&appData.colorPicker);
-    InitRenderingState(appData.canvas);
-
-    appData.toolbarRec = (Rectangle){0.0f, 0.0f, GetScreenWidth(), 90.0f};
-
-    appData.brushData.color = BLACK;
-    appData.brushData.size = 6.0f;
-
-    appData.toolData.size = 1.0f;
-
-    return appData;
-}
-
-void CloseApp(void* appData)
-{
-    App* data = (App*)appData;
-
-    UnloadRenderTexture(data->canvas.renderer);
-    CloseWindow();
-}
-
 int main()
 {
-    App app = InitApp();
-    UpdateApp(&app);
-    CloseApp(&app);
+    App app {};
+    app.Run();
 
     return 0;
 }
