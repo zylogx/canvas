@@ -131,3 +131,45 @@ void FloodFill(Image* image, int x, int y, Color targetColor, Color fillColor)
 
     ColorStackFree(&stack);
 }
+
+void PaintBucket(const RenderTexture2D canvas, int32_t mouseX, int32_t mouseY, Color color)
+{
+    Image imageA = LoadImageFromTexture(canvas.texture);
+
+    if (mouseX < 0 || mouseY < 0 || mouseX >= imageA.width || mouseY >= imageA.height) 
+    {
+        UnloadImage(imageA);
+        return; // Ensure mouse position is valid
+    }
+
+    Color* pixels = (Color*)imageA.data;
+    Color targetColor = pixels[mouseY*imageA.width + mouseX];
+    Color fillColor = color;
+
+    // Exit early if the target color is the same as the fill color
+    if (ColorIsEqual(targetColor, fillColor)) 
+    {
+        UnloadImage(imageA);
+        return;
+    }
+    else
+    {
+        UnloadImage(imageA);
+
+        GetRenderingState()->Push();
+
+        Image imageB = LoadImageFromTexture(canvas.texture);
+
+        Color* pixels = (Color*)imageB.data;
+        Color targetColor = pixels[mouseY*imageB.width + mouseX];
+        Color fillColor = color;
+
+        FloodFill(&imageB, mouseX, mouseY, targetColor, fillColor);
+
+        // Update the texture with modified pixel data
+        UpdateTexture(canvas.texture, imageB.data);
+
+        // Unload image after updating the texture
+        UnloadImage(imageB);
+    }
+}

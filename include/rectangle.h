@@ -14,4 +14,4 @@
 void DrawDottedRec(Rectangle rec, Color color);
 
 // Draw a rectangle on the canvas
-void DrawRecToCanvas(const RenderTexture2D canvas, Rectangle* rec, bool* isDrawRec);
+void DrawRecToCanvas(const RenderTexture2D& canvas, Rectangle* rec, bool* isDrawRec);

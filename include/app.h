@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "tool.h"
 #include "canvas.h"
 #include "rectangle.h"
 #include "color_picker.h"
@@ -12,18 +13,6 @@
 #define RAYGUI_IMPLEMENTATION
 #include "raygui/src/raygui.h"
 
-struct ToolData
-{
-    float size;
-    bool isUpdate;
-};
-
-struct BrushData
-{
-    float size;
-    Color color;
-};
-
 struct App
 {
     Canvas canvas;
@@ -31,7 +20,6 @@ struct App
     bool isDrawRec;
     ColorPicker colorPicker;
     Rectangle toolbarRec;
-    int32_t selectedTool;
     BrushData brushData;
     ToolData toolData;
 };

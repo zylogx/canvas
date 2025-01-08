@@ -38,7 +38,7 @@ void DrawDottedRec(Rectangle rec, Color color)
     }
 }
 
-void DrawRecToCanvas(const RenderTexture2D canvas, Rectangle* rec, bool* isDrawRec)
+void DrawRecToCanvas(const RenderTexture2D& canvas, Rectangle* rec, bool* isDrawRec)
 {
     static float dx = 0.0f, dy = 0.0f;
     Vector2 mousePos = GetMousePosition();

@@ -6,6 +6,7 @@
 
 #include "raylib.h"
 #include "color_stack.h"
+#include "rendering_state.h"
 #include "raygui/src/raygui.h"
 
 #include <stdint.h>
@@ -31,3 +32,6 @@ void DrawColorPicker(ColorPicker* picker, Vector2 mousePos);
 
 // Replace connected targetColor in image starting at (x, y) with fillColor
 void FloodFill(Image* image, int x, int y, Color targetColor, Color fillColor);
+
+// Apply the flood fill
+void PaintBucket(const RenderTexture2D canvas, int32_t mouseX, int32_t mouseY, Color color);
