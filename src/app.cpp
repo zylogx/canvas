@@ -326,6 +326,10 @@ void UpdateApp(void* appData)
             Rubber(data->canvas.renderer, mousePos, data->toolData.size);
         }  
     }
+    else
+    {
+        EnableCanvas();
+    }
 
     DrawRectangleRec(data->toolbarRec, LIGHTGRAY);
 
