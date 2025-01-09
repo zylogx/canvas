@@ -4,6 +4,8 @@
 
 #include "../include/app.h"
 
+#include <functional>
+
 static bool isUpdateToolSize = false;
 
 static void CheckUndoRedoKeys()
@@ -31,7 +33,7 @@ void App::Run()
 
     Color currentColor = GetColorPickerCurrentColor(data->colorPicker);
 
-    auto update = [&]()
+    std::function<void()> Update = [&]()
     {
         CheckUndoRedoKeys();
         data->brushData.color = currentColor;
@@ -41,7 +43,7 @@ void App::Run()
         UpdateCanvas(&data->canvas, mousePos);
     };
 
-    auto render = [&]()
+    std::function<void()> Render = [&]()
     {
         BeginDrawing();
         ClearBackground((Color){204, 213, 229, 255});
@@ -126,8 +128,8 @@ void App::Run()
 
     while (!WindowShouldClose())
     {
-        update();
-        render();
+        Update();
+        Render();
     }
 }
 
