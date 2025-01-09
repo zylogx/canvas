@@ -31,14 +31,14 @@ void App::Run()
 
     Vector2 mousePos = GetMousePosition();
 
-    Color currentColor = GetColorPickerCurrentColor(data->colorPicker);
+    Color currentColor = data->colorPicker.GetCurrentColor();
 
     std::function<void()> Update = [&]()
     {
         CheckUndoRedoKeys();
         data->brushData.color = currentColor;
         mousePos = GetMousePosition();
-        currentColor = GetColorPickerCurrentColor(data->colorPicker);
+        currentColor = data->colorPicker.GetCurrentColor();
         data->toolData.isUpdate = isUpdateToolSize;
         UpdateCanvas(&data->canvas, mousePos);
     };
@@ -49,7 +49,7 @@ void App::Run()
         ClearBackground((Color){204, 213, 229, 255});
         DrawCanvas(&data->canvas);
 
-        if (!CheckCollisionPointRec(mousePos, data->toolbarRec) && !isUpdateToolSize && IsCanvasEnabled())
+        if (!CheckCollisionPointRec(mousePos, data->toolbarRec) && !isUpdateToolSize && IsCanvasEnabled() && !data->colorPicker.IsShown())
         {
             if (data->toolData.selectedTool == 0)
             {
@@ -121,7 +121,7 @@ void App::Run()
 
         isUpdateToolSize = DrawToolSizeUpdater(&data->toolData, mousePos, (Vector2){310.0f, 11.0f});
 
-        DrawColorPicker(&data->colorPicker, mousePos);
+        data->colorPicker.Draw();
         DrawFPS(5, 100);
         EndDrawing();
     };

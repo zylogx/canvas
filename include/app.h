@@ -38,7 +38,6 @@ public:
         rec = (Rectangle){0};
         isDrawRec = false;
         
-        InitColorPicker(&colorPicker);
         InitRenderingState(canvas);
 
         toolbarRec = (Rectangle){0.0f, 0.0f, GetScreenWidth(), 90.0f};
