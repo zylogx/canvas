@@ -53,7 +53,7 @@ extern template class RenderingState<Canvas>;
 Vector2 GetMouseDrawPosition();
 
 // Get the current X-coordinate of the mouse for drawing on the canvas
-int32_t GetMouseDrawX();
+int GetMouseDrawX();
 
 // Get the current Y-coordinate of the mouse for drawing on the canvas
-int32_t GetMouseDrawY();
+int GetMouseDrawY();

@@ -15,28 +15,28 @@ void CanvasObject::DrawDottedRectangleLines(Rectangle rec, Color color)
     for (float currentX = rec.x; currentX < rec.x + rec.width; currentX += dotLength + gapLength) 
     {
         float nextX = fminf(currentX + dotLength, rec.x + rec.width);
-        DrawLine((int16_t)currentX, (int16_t)rec.y, (int16_t)nextX, (int16_t)rec.y, color);
+        DrawLine(currentX, rec.y, nextX, rec.y, color);
     }
 
     // Right side
     for (float currentY = rec.y; currentY < rec.y + rec.height; currentY += dotLength + gapLength) 
     {
         float nextY = fminf(currentY + dotLength, rec.y + rec.height);
-        DrawLine((int16_t)(rec.x + rec.width), (int16_t)currentY, (int16_t)(rec.x + rec.width), (int16_t)nextY, color);
+        DrawLine((rec.x + rec.width), currentY, (rec.x + rec.width), nextY, color);
     }
 
     // Bottom side
     for (float currentX = rec.x + rec.width; currentX > rec.x; currentX -= dotLength + gapLength) 
     {
         float nextX = fmaxf(currentX - dotLength, rec.x);
-        DrawLine((int16_t)currentX, (int16_t)(rec.y + rec.height), (int16_t)nextX, (int16_t)(rec.y + rec.height), color);
+        DrawLine(currentX, (rec.y + rec.height), nextX, (rec.y + rec.height), color);
     }
 
     // Left side
     for (float currentY = rec.y + rec.height; currentY > rec.y; currentY -= dotLength + gapLength) 
     {
         float nextY = fmaxf(currentY - dotLength, rec.y);
-        DrawLine((int16_t)rec.x, (int16_t)currentY, (int16_t)rec.x, (int16_t)nextY, color);
+        DrawLine(rec.x, currentY, rec.x, nextY, color);
     }
 }
 

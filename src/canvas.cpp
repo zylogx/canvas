@@ -102,9 +102,9 @@ void DrawCanvas(Canvas* canvas)
 {
     DrawTexturePro(
         canvas->renderer.texture,
-        (Rectangle) {0, 0, (float)canvas->renderer.texture.width, (float)canvas->renderer.texture.height}, 
-        (Rectangle) {canvasPosX, canvasPosY, (float)canvas->renderer.texture.width, (float)canvas->renderer.texture.height}, 
-        (Vector2) {0.0f, 0.0f},
+        {0, 0, (float)canvas->renderer.texture.width, (float)canvas->renderer.texture.height}, 
+        {canvasPosX, canvasPosY, (float)canvas->renderer.texture.width, (float)canvas->renderer.texture.height}, 
+        {0.0f, 0.0f},
         0.0f, 
         WHITE
     );

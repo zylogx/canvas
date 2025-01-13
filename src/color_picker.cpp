@@ -6,12 +6,12 @@
 
 static void DrawRgbRec(Vector2 pos, Vector2 mousePos, bool* isShowColorPicker)
 {
-    Vector2 drawPos = {pos.x + 235, pos.y + 2};
+    Vector2 drawPos {pos.x + 235, pos.y + 2};
     Color color = DARKGREEN;
 
     GuiColorPanel((Rectangle){drawPos.x, drawPos.y, 30, 30}, " ", &color);
 
-    if (CheckCollisionPointRec(mousePos, (Rectangle){drawPos.x, drawPos.y, 30, 30}) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+    if (CheckCollisionPointRec(mousePos, {drawPos.x, drawPos.y, 30, 30}) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
     {
         *isShowColorPicker = !(*isShowColorPicker);
     }
@@ -25,7 +25,7 @@ void ColorPicker::Draw()
 
     auto* data = (this);
 
-    for (uint16_t i = 0; i < 10; i++)
+    for (unsigned i = 0; i < 10; i++)
     {
         Rectangle recA {40 + data->pos.x + 19*i, data->pos.y + 19*0, 16, 16};
         Rectangle recB {40 + data->pos.x + 19*i, data->pos.y + 19*1, 16, 16};
@@ -39,7 +39,7 @@ void ColorPicker::Draw()
         DrawRectangleLinesEx(recA, 0.6f, DARKGRAY);
         DrawRectangleLinesEx(recB, 0.6f, DARKGRAY);
 
-        DrawRectangleLinesEx((Rectangle){40 + data->pos.x + 19*i, data->pos.y + 19*2, 16, 16}, 0.6f, DARKGRAY);
+        DrawRectangleLinesEx({40 + data->pos.x + 19*i, data->pos.y + 19*2, 16, 16}, 0.6f, DARKGRAY);
 
         if (!data->isShowColorPicker)
         {
@@ -59,27 +59,27 @@ void ColorPicker::Draw()
     {
         Vector2 guiColorPickerPos {(float)GetScreenWidth() / 2 - 100, (float)GetScreenHeight() / 2 - 150};
 
-        DrawRectangleRec((Rectangle){guiColorPickerPos.x, guiColorPickerPos.y, 280, 300}, LIGHTGRAY);
+        DrawRectangleRec({guiColorPickerPos.x, guiColorPickerPos.y, 280, 300}, LIGHTGRAY);
 
-        GuiColorPicker((Rectangle){guiColorPickerPos.x + 40, guiColorPickerPos.y + 40, 190, 180}, "", &data->currentColor);
+        GuiColorPicker({guiColorPickerPos.x + 40, guiColorPickerPos.y + 40, 190, 180}, "", &data->currentColor);
 
-        if (GuiButton((Rectangle){(float)GetScreenWidth() / 2 + 120, (float)GetScreenHeight() / 2 + 100, 50, 30}, "OK"))
+        if (GuiButton({(float)GetScreenWidth() / 2 + 120, (float)GetScreenHeight() / 2 + 100, 50, 30}, "OK"))
         {
             data->isShowColorPicker = false;
         }
 
-        GuiGroupBox((Rectangle){guiColorPickerPos.x, guiColorPickerPos.y, 280, 300}, "Color Picker");
+        GuiGroupBox({guiColorPickerPos.x, guiColorPickerPos.y, 280, 300}, "Color Picker");
     }
 
     DrawRgbRec(data->pos, mousePos, &data->isShowColorPicker);
     DrawText("Edit", data->pos.x + 242, data->pos.y + 35, 10, BLACK);
     DrawText("Colors", data->pos.x + 234, data->pos.y + 45, 10, BLACK);
-    DrawRectangleRec((Rectangle){data->pos.x + 4, data->pos.y + 4, 30, 30}, data->currentColor);
+    DrawRectangleRec({data->pos.x + 4, data->pos.y + 4, 30, 30}, data->currentColor);
     DrawText("Color", data->pos.x + 5, data->pos.y + 40, 12, BLACK);
-    DrawRectangleLinesEx((Rectangle){data->pos.x - 4, data->pos.y - 4, 280, 62}, 0.6f, DARKGRAY);
+    DrawRectangleLinesEx({data->pos.x - 4, data->pos.y - 4, 280, 62}, 0.6f, DARKGRAY);
 }
 
-void FloodFill(Image* image, int32_t x, int32_t y, Color targetColor, Color fillColor) 
+void FloodFill(Image* image, int x, int y, Color targetColor, Color fillColor) 
 {
     if (!image || !image->data) 
     {
@@ -89,7 +89,7 @@ void FloodFill(Image* image, int32_t x, int32_t y, Color targetColor, Color fill
     ColorStack stack;
     ColorStackInit(&stack, 64);
 
-    ColorStackPush(&stack, (Point){ x, y });
+    ColorStackPush(&stack, { x, y });
 
     Color* pixels = (Color*)image->data;
 
@@ -108,17 +108,17 @@ void FloodFill(Image* image, int32_t x, int32_t y, Color targetColor, Color fill
         {
             pixels[p.y*image->width + p.x] = fillColor;
 
-            ColorStackPush(&stack, (Point){ p.x + 1, p.y });
-            ColorStackPush(&stack, (Point){ p.x - 1, p.y });
-            ColorStackPush(&stack, (Point){ p.x, p.y + 1 });
-            ColorStackPush(&stack, (Point){ p.x, p.y - 1 });
+            ColorStackPush(&stack, { p.x + 1, p.y });
+            ColorStackPush(&stack, { p.x - 1, p.y });
+            ColorStackPush(&stack, { p.x, p.y + 1 });
+            ColorStackPush(&stack, { p.x, p.y - 1 });
         }
     }
 
     ColorStackFree(&stack);
 }
 
-void PaintBucket(const RenderTexture2D& canvas, int32_t mouseX, int32_t mouseY, Color color)
+void PaintBucket(const RenderTexture2D& canvas, int mouseX, int mouseY, Color color)
 {
     Image imageA = LoadImageFromTexture(canvas.texture);
 

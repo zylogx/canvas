@@ -9,7 +9,7 @@ struct ToolData
 {
     float size;
     bool isUpdate;
-    uint8_t selectedTool;
+    int selectedTool;
 };
 
 // Erase part of the canvas at the given position with the specified size

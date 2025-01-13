@@ -5,7 +5,9 @@
 #pragma once
 
 #include "raylib.h"
-#include "types.h"
+#include "type.h"
+
+#include <stddef.h>
 
 struct ColorStack
 {

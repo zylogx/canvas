@@ -16,7 +16,7 @@ void Rubber(RenderTexture renderer, Vector2 mousePos, float size)
         BeginTextureMode(renderer);
         
         // Y-flip adjustment for OpenGL
-        Rectangle flippedRec = (Rectangle){mousePos.x, renderer.texture.height - (mousePos.y + 10), size*10, size*10};
+        Rectangle flippedRec = {mousePos.x, renderer.texture.height - (mousePos.y + 10), size*10, size*10};
         
         // Draw the rectangle with flipped Y-coordinate
         DrawRectangleLinesEx(flippedRec, 1.4f, RAYWHITE);
@@ -117,10 +117,10 @@ bool DrawToolSizeUpdater(ToolData* tool, Vector2 mousePos, Vector2 pos)
     Rectangle rec {pos.x, pos.y, 45, 62};
     DrawRectangleLinesEx(rec, 0.8f, BLACK);
 
-    DrawRectangleRec((Rectangle){pos.x + 2, pos.y + 6, 41, 2}, BLACK);
-    DrawRectangleRec((Rectangle){pos.x + 2, pos.y + 11, 41, 5}, BLACK);
-    DrawRectangleRec((Rectangle){pos.x + 2, pos.y + 19, 41, 7}, BLACK);
-    DrawRectangleRec((Rectangle){pos.x + 2, pos.y + 29, 41, 9}, BLACK);
+    DrawRectangleRec({pos.x + 2, pos.y + 6, 41, 2}, BLACK);
+    DrawRectangleRec({pos.x + 2, pos.y + 11, 41, 5}, BLACK);
+    DrawRectangleRec({pos.x + 2, pos.y + 19, 41, 7}, BLACK);
+    DrawRectangleRec({pos.x + 2, pos.y + 29, 41, 9}, BLACK);
 
     DrawText("Size", pos.x + 10, pos.y + 45, 12, BLACK);
 
@@ -129,7 +129,7 @@ bool DrawToolSizeUpdater(ToolData* tool, Vector2 mousePos, Vector2 pos)
         tool->isUpdate = true;
     }
 
-    int8_t onHover = 0;
+    int onHover = 0;
     if (tool->isUpdate)
     {
         float y = pos.y + 64.0f;
@@ -139,7 +139,7 @@ bool DrawToolSizeUpdater(ToolData* tool, Vector2 mousePos, Vector2 pos)
         Rectangle recD {pos.x, y + 18*3, 45, 18};
 
         // Background
-        DrawRectangleRec((Rectangle){pos.x, y, 45, 18*4}, (Color){245, 246, 247, 255});
+        DrawRectangleRec({pos.x, y, 45, 18*4}, (Color){245, 246, 247, 255});
 
         if (CheckCollisionPointRec(mousePos, recA))
         {
@@ -179,10 +179,10 @@ bool DrawToolSizeUpdater(ToolData* tool, Vector2 mousePos, Vector2 pos)
         DrawRectangleLinesEx(recC, 0.8f, BLACK);
         DrawRectangleLinesEx(recD, 0.8f, BLACK);
 
-        DrawRectangleRec((Rectangle){recA.x + 2, recA.y + 2, recA.width - 4, 4}, (onHover == 1) ? GRAY : BLACK);
-        DrawRectangleRec((Rectangle){recB.x + 2, recB.y + 2, recB.width - 4, 7}, (onHover == 2) ? GRAY : BLACK);
-        DrawRectangleRec((Rectangle){recC.x + 2, recC.y + 2, recC.width - 4, 9}, (onHover == 3) ? GRAY : BLACK);
-        DrawRectangleRec((Rectangle){recD.x + 2, recD.y + 2, recD.width - 4, 11}, (onHover == 4) ? GRAY : BLACK);
+        DrawRectangleRec({recA.x + 2, recA.y + 2, recA.width - 4, 4},  (onHover == 1) ? GRAY : BLACK);
+        DrawRectangleRec({recB.x + 2, recB.y + 2, recB.width - 4, 7},  (onHover == 2) ? GRAY : BLACK);
+        DrawRectangleRec({recC.x + 2, recC.y + 2, recC.width - 4, 9},  (onHover == 3) ? GRAY : BLACK);
+        DrawRectangleRec({recD.x + 2, recD.y + 2, recD.width - 4, 11}, (onHover == 4) ? GRAY : BLACK);
     }
 
     if (tool->isUpdate && onHover != 0 && IsMouseButtonReleased(MOUSE_BUTTON_LEFT))

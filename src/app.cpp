@@ -90,8 +90,8 @@ void App::Run()
         DrawRectangleRec(data->toolbarRec, LIGHTGRAY);
 
         // Undo and redo
-        Rectangle undoRec = {20, 5, 30, 24};
-        Rectangle redoRec = {55, 5, 30, 24};
+        Rectangle undoRec {20, 5, 30, 24};
+        Rectangle redoRec {55, 5, 30, 24};
 
         if (CheckCollisionPointRec(mousePos, undoRec))
         {
@@ -121,7 +121,7 @@ void App::Run()
         GuiDrawIcon(ICON_UNDO, undoRec.x + 4, undoRec.y + 4, 1, BLACK);
         GuiDrawIcon(ICON_REDO, redoRec.x + 4, redoRec.y + 4, 1, BLACK);
 
-        isUpdateToolSize = DrawToolSizeUpdater(&data->toolData, mousePos, (Vector2){310.0f, 11.0f});
+        isUpdateToolSize = DrawToolSizeUpdater(&data->toolData, mousePos, {310.0f, 11.0f});
 
         data->colorPicker.Draw();
         DrawFPS(9, 100);

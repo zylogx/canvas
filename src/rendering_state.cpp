@@ -113,12 +113,12 @@ Vector2 GetMouseDrawPosition()
     return {GetMouseX() - canvasPosX, flippedY + canvasPosY};
 }
 
-int32_t GetMouseDrawX()
+int GetMouseDrawX()
 {
     return GetMouseX() - canvasPosX;
 }
 
-int32_t GetMouseDrawY()
+int GetMouseDrawY()
 {
     // Flip Y-axis for texture drawing
     float flippedY = renderingState->GetCanvas()->renderer.texture.height - GetMouseY();
