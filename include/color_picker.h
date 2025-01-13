@@ -30,7 +30,7 @@ public:
 };
 
 // Replace connected targetColor in image starting at (x, y) with fillColor
-void FloodFill(Image* image, int x, int y, Color targetColor, Color fillColor);
+void FloodFill(Image* image, int32_t x, int32_t y, Color targetColor, Color fillColor);
 
 // Apply the flood fill
 void PaintBucket(const RenderTexture2D& canvas, int32_t mouseX, int32_t mouseY, Color color);

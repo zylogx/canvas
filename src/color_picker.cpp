@@ -79,7 +79,7 @@ void ColorPicker::Draw()
     DrawRectangleLinesEx((Rectangle){data->pos.x - 4, data->pos.y - 4, 280, 62}, 0.6f, DARKGRAY);
 }
 
-void FloodFill(Image* image, int x, int y, Color targetColor, Color fillColor) 
+void FloodFill(Image* image, int32_t x, int32_t y, Color targetColor, Color fillColor) 
 {
     if (!image || !image->data) 
     {
