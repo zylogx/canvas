@@ -28,7 +28,7 @@ void Rubber(RenderTexture renderer, Vector2 mousePos, float size)
 void DrawSelector(ToolData* data, Vector2 mousePos)
 {
     // Define selector position and size
-    Vector2 pos = {380.0f, 15.0f};
+    Vector2 pos {380.0f, 15.0f};
     float selectorWidth = 100.0f;
     float selectorHeight = 62.0f;
 
@@ -38,13 +38,13 @@ void DrawSelector(ToolData* data, Vector2 mousePos)
     pos.x = pos.x - 4.0f;
     pos.y = pos.y - 4.0f;
 
-    Rectangle recA = {pos.x + iconSizeW*0, pos.y, iconSizeW, iconSizeH};
-    Rectangle recB = {pos.x + iconSizeW*1, pos.y, iconSizeW, iconSizeH};
-    Rectangle recC = {pos.x + iconSizeW*2, pos.y, iconSizeW, iconSizeH};
+    Rectangle recA {pos.x + iconSizeW*0, pos.y, iconSizeW, iconSizeH};
+    Rectangle recB {pos.x + iconSizeW*1, pos.y, iconSizeW, iconSizeH};
+    Rectangle recC {pos.x + iconSizeW*2, pos.y, iconSizeW, iconSizeH};
     
-    Rectangle recD = {pos.x + iconSizeW*0, pos.y + iconSizeH*1, iconSizeW, iconSizeH};
-    Rectangle recE = {pos.x + iconSizeW*1, pos.y + iconSizeH*1, iconSizeW, iconSizeH};
-    Rectangle recF = {pos.x + iconSizeW*2, pos.y + iconSizeH*1, iconSizeW, iconSizeH};
+    Rectangle recD {pos.x + iconSizeW*0, pos.y + iconSizeH*1, iconSizeW, iconSizeH};
+    Rectangle recE {pos.x + iconSizeW*1, pos.y + iconSizeH*1, iconSizeW, iconSizeH};
+    Rectangle recF {pos.x + iconSizeW*2, pos.y + iconSizeH*1, iconSizeW, iconSizeH};
 
     if (CheckCollisionPointRec(mousePos, recA))
     {
@@ -112,30 +112,9 @@ void DrawSelector(ToolData* data, Vector2 mousePos)
     GuiDrawIcon(ICON_ZOOM_ALL, recF.x, recF.y, 2, BLACK);
 }
 
-void DrawBrushToCanvas(BrushData brush, RenderTexture2D renderer, Vector2 mousePos)
-{
-    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
-    {
-        GetRenderingState()->Push();
-    }
-
-    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
-    {   
-        BeginTextureMode(renderer);
-        
-        // Flip Y-axis for texture drawing
-        float flippedY = renderer.texture.height - mousePos.y;
-
-        // Draw the brush circle at the adjusted position
-        DrawCircle((int32_t)mousePos.x, (int32_t)flippedY, brush.size, brush.color);
-        
-        EndTextureMode();
-    }
-}
-
 bool DrawToolSizeUpdater(ToolData* tool, Vector2 mousePos, Vector2 pos)
 {
-    Rectangle rec = {pos.x, pos.y, 45, 62};
+    Rectangle rec {pos.x, pos.y, 45, 62};
     DrawRectangleLinesEx(rec, 0.8f, BLACK);
 
     DrawRectangleRec((Rectangle){pos.x + 2, pos.y + 6, 41, 2}, BLACK);
@@ -153,11 +132,11 @@ bool DrawToolSizeUpdater(ToolData* tool, Vector2 mousePos, Vector2 pos)
     int8_t onHover = 0;
     if (tool->isUpdate)
     {
-        const float y = pos.y + 64.0f;
-        Rectangle recA = {pos.x, y + 18*0, 45, 18};
-        Rectangle recB = {pos.x, y + 18*1, 45, 18};
-        Rectangle recC = {pos.x, y + 18*2, 45, 18};
-        Rectangle recD = {pos.x, y + 18*3, 45, 18};
+        float y = pos.y + 64.0f;
+        Rectangle recA {pos.x, y + 18*0, 45, 18};
+        Rectangle recB {pos.x, y + 18*1, 45, 18};
+        Rectangle recC {pos.x, y + 18*2, 45, 18};
+        Rectangle recD {pos.x, y + 18*3, 45, 18};
 
         // Background
         DrawRectangleRec((Rectangle){pos.x, y, 45, 18*4}, (Color){245, 246, 247, 255});

@@ -33,4 +33,4 @@ public:
 void FloodFill(Image* image, int x, int y, Color targetColor, Color fillColor);
 
 // Apply the flood fill
-void PaintBucket(const RenderTexture2D canvas, int32_t mouseX, int32_t mouseY, Color color);
+void PaintBucket(const RenderTexture2D& canvas, int32_t mouseX, int32_t mouseY, Color color);

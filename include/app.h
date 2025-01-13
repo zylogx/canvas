@@ -6,7 +6,7 @@
 
 #include "tool.h"
 #include "canvas.h"
-#include "rectangle.h"
+#include "shapes.h"
 #include "color_picker.h"
 #include "rendering_state.h"
 
@@ -24,8 +24,8 @@ private:
     bool isDrawRec;
     ColorPicker colorPicker;
     Rectangle toolbarRec;
-    BrushData brushData;
     ToolData toolData;
+    CanvasObject::BrushData brushData;
 
 public:
     App()

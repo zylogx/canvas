@@ -33,6 +33,8 @@ void App::Run()
 
     Color currentColor = data->colorPicker.GetCurrentColor();
 
+    data->toolData.selectedTool = 0;
+
     std::function<void()> Update = [&]()
     {
         CheckUndoRedoKeys();
@@ -55,21 +57,21 @@ void App::Run()
             {
                 data->brushData.size = data->toolData.size;
 
-                DrawBrushToCanvas(data->brushData, data->canvas.renderer, mousePos);
+                CanvasObject::DrawBrush(data->brushData, data->canvas.renderer, mousePos);
             }
             else if (data->toolData.selectedTool == 1)
             {
                 if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) 
                 {
-                    int32_t mouseX = (int32_t)mousePos.x;
-                    int32_t mouseY = (int32_t)mousePos.y;
+                    int32_t mouseX = (int32_t)mousePos.x - canvasPosX;
+                    int32_t mouseY = (int32_t)mousePos.y - canvasPosY;
 
                     PaintBucket(data->canvas.renderer, mouseX, mouseY, currentColor);
                 }
             }
             else if (data->toolData.selectedTool == 2)
             {
-                DrawRecToCanvas(data->canvas.renderer, &data->rec, &data->isDrawRec);
+                CanvasObject::DrawRectangleLines(data->canvas.renderer, &data->rec, &data->isDrawRec);
             }
             // else if (data->selectedTool == 3)
             // {
@@ -122,7 +124,7 @@ void App::Run()
         isUpdateToolSize = DrawToolSizeUpdater(&data->toolData, mousePos, (Vector2){310.0f, 11.0f});
 
         data->colorPicker.Draw();
-        DrawFPS(5, 100);
+        DrawFPS(9, 100);
         EndDrawing();
     };
 

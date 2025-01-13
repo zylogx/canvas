@@ -6,7 +6,7 @@
 
 #include "raylib.h"
 #include "constant.h"
-#include "rectangle.h"
+#include "shapes.h"
 #include "canvas_state.h"
 
 struct Canvas

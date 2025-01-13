@@ -32,6 +32,9 @@ public:
 
     // Clear all rendering states from the stack
     void Clear();
+
+    // Retrieve the canvas
+    inline T* GetCanvas() const { return canvas; }
 };
 
 // Forward declaration of the Canvas class
@@ -45,3 +48,12 @@ std::shared_ptr<RenderingState<Canvas>> GetRenderingState();
 
 // Declare explicit instantiation
 extern template class RenderingState<Canvas>;
+
+// Get the current mouse position for drawing on the canvas
+Vector2 GetMouseDrawPosition();
+
+// Get the current X-coordinate of the mouse for drawing on the canvas
+int32_t GetMouseDrawX();
+
+// Get the current Y-coordinate of the mouse for drawing on the canvas
+int32_t GetMouseDrawY();

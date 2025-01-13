@@ -2,9 +2,11 @@
 * Author: Wildan R Wijanarko
 */
 
-#include "../include/rectangle.h"
+#include "../include/shapes.h"
 
-void DrawDottedRec(Rectangle rec, Color color) 
+#include <cmath>
+
+void CanvasObject::DrawDottedRectangleLines(Rectangle rec, Color color)
 {
     const float dotLength = 10.0f;
     const float gapLength = 5.0f;
@@ -38,7 +40,7 @@ void DrawDottedRec(Rectangle rec, Color color)
     }
 }
 
-void DrawRecToCanvas(const RenderTexture2D& canvas, Rectangle* rec, bool* isDrawRec)
+void CanvasObject::DrawRectangleLines(const RenderTexture2D& canvas, Rectangle* rec, bool* isDrawRec)
 {
     static float dx = 0.0f, dy = 0.0f;
     Vector2 mousePos = GetMousePosition();
@@ -63,10 +65,10 @@ void DrawRecToCanvas(const RenderTexture2D& canvas, Rectangle* rec, bool* isDraw
         float top    = (y1 < y2) ? y1 : y2;
         float bottom = (y1 > y2) ? y1 : y2;
 
-        *rec = (Rectangle){left, top, right - left, bottom - top};
+        *rec = {left, top, right - left, bottom - top};
 
         // Ensure the rectangle is being drawn while dragging
-        DrawDottedRec(*rec, BLACK);
+        CanvasObject::DrawDottedRectangleLines(*rec, BLACK);
     }
     else if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
     {
@@ -81,10 +83,28 @@ void DrawRecToCanvas(const RenderTexture2D& canvas, Rectangle* rec, bool* isDraw
         BeginTextureMode(canvas);
         
         // Y-flip adjustment for OpenGL
-        Rectangle flippedRec = (Rectangle){rec->x, canvas.texture.height - (rec->y + rec->height), rec->width, rec->height};
+        Rectangle flippedRec {rec->x - canvasPosX, GetMouseDrawY(), rec->width, rec->height};
         
         // Draw the rectangle with flipped Y-coordinate
         DrawRectangleLinesEx(flippedRec, 1.4f, BLACK);
+        
+        EndTextureMode();
+    }
+}
+
+void CanvasObject::DrawBrush(const BrushData& brush, const RenderTexture2D& renderer, Vector2 mousePos)
+{
+    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) 
+    {
+        GetRenderingState()->Push();
+    }
+
+    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+    {   
+        BeginTextureMode(renderer);
+        
+        // Draw the brush circle at the adjusted position
+        DrawCircle(GetMouseDrawX(), GetMouseDrawY(), brush.size, brush.color);
         
         EndTextureMode();
     }

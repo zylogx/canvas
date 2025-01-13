@@ -111,7 +111,7 @@ void DrawCanvas(Canvas* canvas)
 
     if (isUpdateCanvasSize)
     {
-        DrawDottedRec(rec, BLACK);
+        CanvasObject::DrawDottedRectangleLines(rec, BLACK);
     }
 
     DrawRectangleRec(updateRecA, DARKGRAY);

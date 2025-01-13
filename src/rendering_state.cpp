@@ -104,3 +104,24 @@ void RenderingState<T>::Clear()
         redoStack.pop();
     }
 }
+
+Vector2 GetMouseDrawPosition()
+{
+    // Flip Y-axis for texture drawing
+    float flippedY = renderingState->GetCanvas()->renderer.texture.height - GetMouseY();
+
+    return {GetMouseX() - canvasPosX, flippedY + canvasPosY};
+}
+
+int32_t GetMouseDrawX()
+{
+    return GetMouseX() - canvasPosX;
+}
+
+int32_t GetMouseDrawY()
+{
+    // Flip Y-axis for texture drawing
+    float flippedY = renderingState->GetCanvas()->renderer.texture.height - GetMouseY();
+
+    return flippedY + canvasPosY;
+}

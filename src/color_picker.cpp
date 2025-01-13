@@ -19,16 +19,16 @@ static void DrawRgbRec(Vector2 pos, Vector2 mousePos, bool* isShowColorPicker)
 
 void ColorPicker::Draw()
 {
-    const Color colorsA[] = {WHITE, YELLOW, ORANGE, RED, PINK, PURPLE, GREEN, BLUE, BLACK, DARKGRAY};
-    const Color colorsB[] = {GOLD, BROWN, DARKBROWN, DARKPURPLE, DARKGREEN, DARKBLUE, VIOLET, MAGENTA, MAROON, LIGHTGRAY, GRAY};
+    const Color colorsA[] {WHITE, YELLOW, ORANGE, RED, PINK, PURPLE, GREEN, BLUE, BLACK, DARKGRAY};
+    const Color colorsB[] {GOLD, BROWN, DARKBROWN, DARKPURPLE, DARKGREEN, DARKBLUE, VIOLET, MAGENTA, MAROON, LIGHTGRAY, GRAY};
     const Vector2 mousePos = GetMousePosition();
 
     auto* data = (this);
 
     for (uint16_t i = 0; i < 10; i++)
     {
-        Rectangle recA = {40 + data->pos.x + 19*i, data->pos.y + 19*0, 16, 16};
-        Rectangle recB = {40 + data->pos.x + 19*i, data->pos.y + 19*1, 16, 16};
+        Rectangle recA {40 + data->pos.x + 19*i, data->pos.y + 19*0, 16, 16};
+        Rectangle recB {40 + data->pos.x + 19*i, data->pos.y + 19*1, 16, 16};
 
         Color colorA = colorsA[i];
         Color colorB = colorsB[i];
@@ -57,7 +57,7 @@ void ColorPicker::Draw()
 
     if (data->isShowColorPicker)
     {
-        Vector2 guiColorPickerPos = {(float)GetScreenWidth() / 2 - 100, (float)GetScreenHeight() / 2 - 150};
+        Vector2 guiColorPickerPos {(float)GetScreenWidth() / 2 - 100, (float)GetScreenHeight() / 2 - 150};
 
         DrawRectangleRec((Rectangle){guiColorPickerPos.x, guiColorPickerPos.y, 280, 300}, LIGHTGRAY);
 
@@ -118,7 +118,7 @@ void FloodFill(Image* image, int x, int y, Color targetColor, Color fillColor)
     ColorStackFree(&stack);
 }
 
-void PaintBucket(const RenderTexture2D canvas, int32_t mouseX, int32_t mouseY, Color color)
+void PaintBucket(const RenderTexture2D& canvas, int32_t mouseX, int32_t mouseY, Color color)
 {
     Image imageA = LoadImageFromTexture(canvas.texture);
 
