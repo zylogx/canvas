@@ -4,11 +4,6 @@
 
 #pragma once
 
-struct CanvasState 
-{ 
-    bool isCanvasEnabled {true};
-};
-
 // Disable the canvas
 void DisableCanvas();
 

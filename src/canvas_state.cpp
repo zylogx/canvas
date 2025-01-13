@@ -4,19 +4,19 @@
 
 #include "../include/canvas_state.h"
 
-CanvasState canvasState {};
+static bool isCanvasEnabled = true;
 
 void DisableCanvas()
 {
-    canvasState.isCanvasEnabled = false;
+    isCanvasEnabled = false;
 }
 
 void EnableCanvas()
 {
-    canvasState.isCanvasEnabled = true;
+    isCanvasEnabled = true;
 }
 
 bool IsCanvasEnabled()
 {
-    return canvasState.isCanvasEnabled;
+    return isCanvasEnabled;
 }
