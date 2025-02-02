@@ -63,8 +63,8 @@ void App::Run()
             {
                 if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) 
                 {
-                    int32_t mouseX = (int32_t)mousePos.x - canvasPosX;
-                    int32_t mouseY = (int32_t)mousePos.y - canvasPosY;
+                    int mouseX = (int)mousePos.x - canvasPosX;
+                    int mouseY = (int)mousePos.y - canvasPosY;
 
                     PaintBucket(data->canvas.renderer, mouseX, mouseY, currentColor);
                 }

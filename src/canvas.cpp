@@ -28,7 +28,7 @@ void UpdateCanvas(Canvas* canvas, Vector2 mousePos)
     // Update the canvas rec
     rec = {canvasPosX, canvasPosY, canvas->width, canvas->height};
 
-    // Update the recs used to update the canvas size
+    // Update recs used to update the canvas size
     updateRecA = {canvas->width + 20, canvas->height + canvasPosY, 10, 8};
     updateRecB = {canvas->width + 20, (canvas->height + canvasPosY) / 2 + 50, 10, 8};
 

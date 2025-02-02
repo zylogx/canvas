@@ -13,8 +13,8 @@
 #define RAYGUI_IMPLEMENTATION
 #include "raygui/src/raygui.h"
 
-const int16_t screenWidth = 1080;
-const int16_t screenHeight = 720;
+const int screenWidth = 1080;
+const int screenHeight = 720;
 
 class App
 {
