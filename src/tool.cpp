@@ -95,13 +95,13 @@ void DrawSelector(ToolData* data, Vector2 mousePos)
         DrawRectangleRec(recF, GRAY);
     }
 
-    DrawRectangleLinesEx(recA, 0.6, DARKGRAY);
-    DrawRectangleLinesEx(recB, 0.6, DARKGRAY);
-    DrawRectangleLinesEx(recC, 0.6, DARKGRAY);
+    DrawRectangleLinesEx(recA, 0.6f, DARKGRAY);
+    DrawRectangleLinesEx(recB, 0.6f, DARKGRAY);
+    DrawRectangleLinesEx(recC, 0.6f, DARKGRAY);
 
-    DrawRectangleLinesEx(recD, 0.6, DARKGRAY);
-    DrawRectangleLinesEx(recE, 0.6, DARKGRAY);
-    DrawRectangleLinesEx(recF, 0.6, DARKGRAY);
+    DrawRectangleLinesEx(recD, 0.6f, DARKGRAY);
+    DrawRectangleLinesEx(recE, 0.6f, DARKGRAY);
+    DrawRectangleLinesEx(recF, 0.6f, DARKGRAY);
 
     GuiDrawIcon(ICON_PENCIL, recA.x, recA.y, 2, BLACK);
     GuiDrawIcon(ICON_COLOR_BUCKET, recB.x, recB.y, 2, BLACK);
