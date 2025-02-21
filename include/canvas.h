@@ -24,3 +24,5 @@ void UpdateCanvas(Canvas* canvas, Vector2 mousePos);
 
 // Draw the canvas
 void DrawCanvas(Canvas* canvas);
+
+void CheckUndoRedoKeys();

@@ -8,23 +8,6 @@
 
 static bool isUpdateToolSize = false;
 
-static void CheckUndoRedoKeys()
-{
-    const bool isControlDown = IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL);
-
-    if (isControlDown)
-    {
-        if (IsKeyPressed(KEY_Z))
-        {
-            GetRenderingState()->Undo();
-        }
-        else if (IsKeyPressed(KEY_Y))
-        {
-            GetRenderingState()->Redo();
-        }
-    }
-}
-
 void App::Run()
 {
     auto* data = (this);
